@@ -1,4 +1,3 @@
-prompt = "__zoxide_hook;__zoxide_prompt"
 skip_welcome_message = true
 startup = ["zoxide init nushell --hook prompt | save ~/.cache/.zoxide.nu", "source ~/.cache/.zoxide.nu"]
 
