@@ -8,3 +8,6 @@ EDITOR = "nvim"
 [line_editor]
 completion_type = "list"
 edit_mode = "vi"
+
+[textview]
+use_italics = true
