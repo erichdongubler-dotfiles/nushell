@@ -1,6 +1,6 @@
 edit_mode = "vi"
 skip_welcome_message = true
-startup = ["zoxide init nushell --hook prompt | save ~/.cache/.zoxide.nu", "source ~/.cache/.zoxide.nu"]
+startup = ["source ~/AppData/Roaming/nushell/nu/config/erichdongubler/startup.nu"]
 
 [env]
 EDITOR = "nvim"
