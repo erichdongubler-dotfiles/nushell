@@ -118,7 +118,7 @@ module completions {
 use completions *
 
 let default_theme = {
-    separator: white
+    separator: pink
     leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
     header: green_bold
     empty: blue
@@ -129,7 +129,7 @@ let default_theme = {
     date: white
     range: white
     float: white
-    string: white
+    string: yellow
     nothing: white
     binary: white
     cellpath: white
@@ -175,8 +175,9 @@ let-env config = {
   color_config: $default_theme
   use_grid_icons: true
   footer_mode: "25" # always, never, number_of_rows, auto
-  quick_completions: true  # set this to false to prevent auto-selecting completions when only one remains
+  quick_completions: false
   partial_completions: true
+  completion_algorithm: fuzzy
   animate_prompt: false
   float_precision: 2
   use_ansi_coloring: true
@@ -186,6 +187,19 @@ let-env config = {
   sync_history_on_enter: true
   shell_integration: true
   disable_table_indexes: false
+  hooks: {
+    pre_prompt: [{
+      zoxide add -- $env.PWD
+    }]
+    pre_execution: [{
+      $nothing
+    }]
+    env_change: {
+      PWD: [{|before, after|
+        $nothing
+      }]
+    }
+  }
   menus: [
       {
         name: completion_menu
@@ -194,7 +208,7 @@ let-env config = {
         type: {
             layout: columnar
             columns: 4
-            col_width: 20
+            # col_width: 20
             col_padding: 2
         }
         style: {
@@ -305,7 +319,7 @@ let-env config = {
       name: completion_menu
       modifier: none
       keycode: tab
-      mode: emacs
+      mode: vi_insert
       event: {
         until: [
           { send: menu name: completion_menu }
