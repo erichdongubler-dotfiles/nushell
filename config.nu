@@ -168,6 +168,7 @@ let default_theme = {
 }
 
 let-env config = {
+  show_banner: false,
   filesize_metric: false
   table_mode: rounded
   use_ls_colors: true
@@ -177,7 +178,6 @@ let-env config = {
   footer_mode: "25" # always, never, number_of_rows, auto
   quick_completions: true  # set this to false to prevent auto-selecting completions when only one remains
   partial_completions: true
-  animate_prompt: false
   float_precision: 2
   use_ansi_coloring: true
   filesize_format: "auto"
@@ -185,7 +185,6 @@ let-env config = {
   max_history_size: 10000
   sync_history_on_enter: true
   shell_integration: true
-  disable_table_indexes: false
   menus: [
       {
         name: completion_menu
