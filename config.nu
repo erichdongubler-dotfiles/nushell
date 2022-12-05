@@ -168,35 +168,35 @@ let default_theme = {
 }
 
 let-env config = {
-  ls: {
-    use_ls_colors: true
-  }
+  color_config: $default_theme
   completions: {
     quick: true  # set this to false to prevent auto-selecting completions when only one remains
     partial: true
   }
+  edit_mode: vi
   filesize: {
     metric: false
     format: "auto"
   }
+  float_precision: 2
+  footer_mode: "25" # always, never, number_of_rows, auto
   history: {
     max_size: 10000
     sync_on_enter: true
   }
+  ls: {
+    use_ls_colors: true
+  }
   rm: {
     always_trash: false
   }
+  shell_integration: true
+  show_banner: false,
   table: {
     mode: rounded
   }
-  show_banner: false,
-  color_config: $default_theme
-  use_grid_icons: true
-  footer_mode: "25" # always, never, number_of_rows, auto
-  float_precision: 2
   use_ansi_coloring: true
-  edit_mode: vi
-  shell_integration: true
+  use_grid_icons: true
   menus: [
       {
         name: completion_menu
