@@ -1,11 +1,13 @@
 zoxide init nushell --hook prompt | save ~/.zoxide.nu
 
 let-env PROMPT_COMMAND = {
-  starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)'
+  let esc = "\u001B"
+  [
+    ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
+    (starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)')
+  ] | str join
 }
-let-env PROMPT_COMMAND_RIGHT = {
-  [(date now | date format '%m/%d/%Y %r')] | str join
-}
+let-env PROMPT_COMMAND_RIGHT = ""
 
 let-env PROMPT_INDICATOR = { "" }
 let-env PROMPT_INDICATOR_VI_INSERT = { "[i] " }
