@@ -1,4 +1,4 @@
-zoxide init nushell --hook prompt | str replace --string "&&" "and" | str replace --string "||" "or" | save -f ~/.zoxide.nu
+zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
 
 let-env PROMPT_COMMAND = {
   let esc = "\u001B"
