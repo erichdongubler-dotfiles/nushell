@@ -1,7 +1,7 @@
 zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
 
 let-env PROMPT_COMMAND = {
-  let esc = "\u001B"
+  let esc = "\u{001B}"
   [
     ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
     (starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)')
