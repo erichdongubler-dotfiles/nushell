@@ -32,3 +32,5 @@ let-env NU_LIB_DIRS = [
 let-env NU_PLUGIN_DIRS = [
     ($nu.config-path | path dirname | path join 'plugins')
 ]
+
+let-env EDITOR = "nvim"
