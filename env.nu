@@ -7,7 +7,7 @@ let-env PROMPT_COMMAND = {
     (starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)')
   ] | str join
 }
-let-env PROMPT_COMMAND_RIGHT = ""
+let-env PROMPT_COMMAND_RIGHT = { "" }
 
 let-env PROMPT_INDICATOR = { "" }
 let-env PROMPT_INDICATOR_VI_INSERT = { "[i] " }
