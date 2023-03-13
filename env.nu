@@ -1,4 +1,4 @@
-zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
+zoxide init nushell --hook prompt | save --force ~/.zoxide.nu
 
 let-env PROMPT_COMMAND = {
   let esc = "\u{001B}"
