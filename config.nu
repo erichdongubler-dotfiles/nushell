@@ -173,6 +173,11 @@ let-env config = {
     quick: true  # set this to false to prevent auto-selecting completions when only one remains
     partial: true
   }
+  cursor_shape: {
+    emacs: underscore
+    vi_insert: line
+    vi_normal: block
+  }
   edit_mode: vi
   filesize: {
     metric: false
