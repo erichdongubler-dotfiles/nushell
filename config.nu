@@ -167,7 +167,7 @@ let default_theme = {
     shape_nothing: light_cyan
 }
 
-let-env config = {
+$env.config = {
   color_config: $default_theme
   completions: {
     quick: true  # set this to false to prevent auto-selecting completions when only one remains
