@@ -1,19 +1,8 @@
 # TODO: remove the `str replace` once upstream has adjusted: https://github.com/ajeetdsouza/zoxide/issues/599
 zoxide init nushell --hook prompt | str replace --string --all 'let-env ' '$env.' | save -f ~/.zoxide.nu
 
-$env.PROMPT_COMMAND = {
-  let esc = "\u{001B}"
-  [
-    ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
-    (starship prompt --cmd-duration $env.CMD_DURATION_MS $'--status=($env.LAST_EXIT_CODE)')
-  ] | str join
-}
-$env.PROMPT_COMMAND_RIGHT = { "" }
-
-$env.PROMPT_INDICATOR = { "" }
-$env.PROMPT_INDICATOR_VI_INSERT = { "" }
-$env.PROMPT_INDICATOR_VI_NORMAL = { "" }
-$env.PROMPT_MULTILINE_INDICATOR = { "::: " }
+mkdir ~/.cache/starship
+starship init nu | save -f ~/.cache/starship/init.nu
 
 $env.ENV_CONVERSIONS = {
   "PATH": {

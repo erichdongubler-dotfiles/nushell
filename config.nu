@@ -394,3 +394,9 @@ $env.config = {
 }
 
 source ~/.zoxide.nu
+
+use ~/.cache/starship/init.nu
+let esc = "\u{001B}"
+$env.PROMPT_COMMAND = $env.PROMPT_COMMAND | prepend ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
+$env.PROMPT_INDICATOR_VI_INSERT = { "" }
+$env.PROMPT_INDICATOR_VI_NORMAL = { "" }
