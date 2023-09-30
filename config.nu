@@ -400,3 +400,13 @@ let esc = "\u{001B}"
 $env.PROMPT_COMMAND = $env.PROMPT_COMMAND | prepend ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
 $env.PROMPT_INDICATOR_VI_INSERT = { "" }
 $env.PROMPT_INDICATOR_VI_NORMAL = { "" }
+
+def suspend [] {
+  if $nu.os-info.name == "windows" {
+    ^([$env.windir System32 rundll32.exe] | path join) powrprof.dll,SetSuspendState 0,1,0
+  } else {
+    error make {
+      msg: (["unable to determine how to sleep; unrecognized platform " ($nu.os-info | debug)] | str join)
+    }
+  }
+}
