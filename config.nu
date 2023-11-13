@@ -267,7 +267,7 @@ $env.config = {
             description_text: yellow
         }
         source: { |buffer, position|
-            $nu.scope.commands
+            scope commands
             | where command =~ $buffer
             | each { |it| {value: $it.command description: $it.usage} }
         }
@@ -286,7 +286,7 @@ $env.config = {
             description_text: yellow
         }
         source: { |buffer, position|
-            $nu.scope.vars
+            scope variables
             | where name =~ $buffer
             | sort-by name
             | each { |it| {value: $it.name description: $it.type} }
@@ -310,7 +310,7 @@ $env.config = {
             description_text: yellow
         }
         source: { |buffer, position|
-            $nu.scope.commands
+            scope commands
             | where command =~ $buffer
             | each { |it| {value: $it.command description: $it.usage} }
         }
