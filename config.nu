@@ -384,6 +384,16 @@ $env.config = {
       event: { send: menu name: commands_with_description }
     }
     {
+      name: files
+      modifier: control
+      keycode: char_f
+      mode: [emacs, vi_insert]
+      event: {
+          send: executehostcommand
+          cmd: "commandline --insert (fd | lines | str join (char -i 0) | fzf --multi --read0 --layout=reverse --height=40% | decode utf-8 | lines | str join ' ')"
+      }
+    }
+    {
       name: ctrl_w_deleteword
       modifier: control
       keycode: char_w
