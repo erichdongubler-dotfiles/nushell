@@ -190,6 +190,7 @@ $env.config = {
     sync_on_enter: true
   }
   ls: {
+    clickable_links: true
     use_ls_colors: true
   }
   rm: {
