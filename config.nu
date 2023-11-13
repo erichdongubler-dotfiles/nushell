@@ -196,7 +196,7 @@ $env.config = {
   rm: {
     always_trash: false
   }
-  shell_integration: true
+  shell_integration: false # Once we get better support, we can enable this: https://github.com/nushell/nushell/issues/5585
   show_banner: false,
   table: {
     mode: rounded
