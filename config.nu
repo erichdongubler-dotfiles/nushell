@@ -170,7 +170,7 @@ let default_theme = {
 $env.config = {
   color_config: $default_theme
   completions: {
-    quick: true  # set this to false to prevent auto-selecting completions when only one remains
+    quick: true
     partial: true
   }
   cursor_shape: {
