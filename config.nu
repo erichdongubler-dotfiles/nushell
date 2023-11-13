@@ -394,6 +394,16 @@ $env.config = {
       }
     }
     {
+      name: git_refs
+      modifier: control
+      keycode: char_g
+      mode: [emacs, vi_insert]
+      event: {
+        send: executehostcommand
+        cmd: "commandline --insert (git branch -l --format=%(refname:short) | lines | str join (char -i 0) | fzf --multi --read0 --layout=reverse --height=40% | decode utf-8 | lines | str join ' ')"
+      }
+    }
+    {
       name: ctrl_w_deleteword
       modifier: control
       keycode: char_w
