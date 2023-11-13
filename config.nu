@@ -321,7 +321,7 @@ $env.config = {
       name: completion_menu
       modifier: none
       keycode: tab
-      mode: emacs
+      mode: [emacs vi_normal vi_insert]
       event: {
         until: [
           { send: menu name: completion_menu }
