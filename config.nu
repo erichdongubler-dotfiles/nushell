@@ -299,6 +299,8 @@ $env.config = {
   ]
 }
 
+
+use std pwd
 source ~/.zoxide.nu
 
 use ~/.cache/starship/init.nu
