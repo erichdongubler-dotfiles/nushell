@@ -71,6 +71,8 @@ $env.config = {
   float_precision: 2
   footer_mode: "25" # always, never, number_of_rows, auto
   history: {
+    file_format: "sqlite"
+    isolation: true
     max_size: 10000
     sync_on_enter: true
   }
@@ -299,6 +301,8 @@ $env.config = {
   ]
 }
 
+
+use std clip
 
 use std pwd
 source ~/.zoxide.nu
