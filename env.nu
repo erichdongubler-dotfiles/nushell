@@ -1,5 +1,4 @@
-# TODO: remove the `str replace` once upstream has adjusted: https://github.com/ajeetdsouza/zoxide/issues/599
-zoxide init nushell --hook prompt | str replace --all 'let-env ' '$env.' | save -f ~/.zoxide.nu
+zoxide init nushell --hook prompt | save -f ~/.zoxide.nu
 
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
