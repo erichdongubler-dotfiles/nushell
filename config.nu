@@ -301,10 +301,8 @@ $env.config = {
   ]
 }
 
+use std [clip, pwd]
 
-use std clip
-
-use std pwd
 source ~/.zoxide.nu
 
 use ~/.cache/starship/init.nu
