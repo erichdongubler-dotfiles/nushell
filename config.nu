@@ -55,6 +55,8 @@ let default_theme = {
 $env.config = {
   color_config: $default_theme
   completions: {
+    algorithm: prefix
+    case_sensitive: true
     quick: true
     partial: true
   }
