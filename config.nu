@@ -3,7 +3,7 @@
 # possible. Of course, I have some of my own changes on top of it I like. :)
 
 let default_theme = {
-    separator: white
+    separator: pink
     leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
     header: green_bold
     empty: blue
@@ -14,7 +14,7 @@ let default_theme = {
     date: white
     range: white
     float: white
-    string: white
+    string: yellow
     nothing: white
     binary: white
     cellpath: white
@@ -24,29 +24,29 @@ let default_theme = {
     block: white
     hints: dark_gray
 
-    # shapes are used to change the cli syntax highlighting
+    # Command syntax highlighting
     shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: b}
     shape_binary: purple_bold
     shape_bool: light_cyan
     shape_int: purple_bold
     shape_float: purple_bold
     shape_range: yellow_bold
-    shape_internalcall: cyan_bold
-    shape_external: cyan
-    shape_externalarg: green_bold
-    shape_literal: blue
-    shape_operator: yellow
+    shape_internalcall: green_bold
+    shape_external: green
+    shape_externalarg: white
+    shape_literal: red
+    shape_operator: pink
     shape_signature: green_bold
-    shape_string: green
+    shape_string: yellow
     shape_string_interpolation: cyan_bold
     shape_datetime: cyan_bold
     shape_list: cyan_bold
     shape_table: blue_bold
     shape_record: cyan_bold
     shape_block: blue_bold
-    shape_filepath: cyan
-    shape_globpattern: cyan_bold
-    shape_variable: purple
+    shape_filepath: { fg: cyan attr: u }
+    shape_globpattern: { fg: cyan attr: u }
+    shape_variable: cyan_italic
     shape_flag: blue_bold
     shape_custom: green
     shape_nothing: light_cyan
