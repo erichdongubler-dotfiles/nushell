@@ -303,7 +303,8 @@ $env.config = {
   ]
 }
 
-use std [clip, pwd]
+use erichdongubler clipboard clip
+use std pwd
 
 source ~/.zoxide.nu
 
