@@ -32,8 +32,9 @@ let default_theme = {
     shape_float: purple_bold
     shape_range: yellow_bold
     shape_internalcall: green_bold
-    shape_external: green
+    shape_external: darkorange
     shape_externalarg: white
+    shape_external_resolved: green
     shape_literal: red
     shape_operator: pink
     shape_signature: green_bold
@@ -72,6 +73,7 @@ $env.config = {
   }
   float_precision: 2
   footer_mode: "25" # always, never, number_of_rows, auto
+  highlight_resolved_externals: true
   history: {
     file_format: "sqlite"
     isolation: true
