@@ -1,8 +1,8 @@
 use env zoxide init-zoxide
 init-zoxide
 
-mkdir ~/.cache/starship
-starship init nu | save -f ~/.cache/starship/init.nu
+use env starship init-starship
+init-starship
 
 $env.ENV_CONVERSIONS = {
   "PATH": {
