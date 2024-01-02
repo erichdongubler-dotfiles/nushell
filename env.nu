@@ -1,5 +1,5 @@
-# TODO: Remove `str replace` once <https://github.com/ajeetdsouza/zoxide/pull/642> has merged.
-zoxide init nushell --hook prompt | str replace --all "def-env" "def --env" | save -f ~/.zoxide.nu
+use env zoxide init-zoxide
+init-zoxide
 
 mkdir ~/.cache/starship
 starship init nu | save -f ~/.cache/starship/init.nu
