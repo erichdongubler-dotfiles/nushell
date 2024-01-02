@@ -19,6 +19,9 @@ $env.NU_PLUGIN_DIRS = [
 
 $env.EDITOR = "nvim"
 
+use ([($nu.env-path | path dirname) env os.nu] | path join) init-os-env
+init-os-env | load-env
+
 use ([($nu.env-path | path dirname) env zoxide.nu ] | path join) init-zoxide
 init-zoxide
 
