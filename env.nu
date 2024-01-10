@@ -1,9 +1,3 @@
-use env zoxide init-zoxide
-init-zoxide
-
-use env starship init-starship
-init-starship
-
 $env.ENV_CONVERSIONS = {
   "PATH": {
     from_string: { |s| $s | split row (char esep) | path expand --no-symlink }
@@ -24,3 +18,9 @@ $env.NU_PLUGIN_DIRS = [
 ]
 
 $env.EDITOR = "nvim"
+
+use env zoxide init-zoxide
+init-zoxide
+
+use env starship init-starship
+init-starship
