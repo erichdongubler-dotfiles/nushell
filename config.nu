@@ -77,7 +77,7 @@ $env.config = {
   history: {
     file_format: "sqlite"
     isolation: true
-    max_size: 10000
+    max_size: 10_000
     sync_on_enter: true
   }
   ls: {
