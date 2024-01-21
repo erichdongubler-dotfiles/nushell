@@ -3,54 +3,54 @@
 # possible. Of course, I have some of my own changes on top of it I like. :)
 
 let default_theme = {
-    separator: pink
-    leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
-    header: green_bold
-    empty: blue
-    bool: white
-    int: white
-    filesize: white
-    duration: white
-    date: white
-    range: white
-    float: white
-    string: yellow
-    nothing: white
-    binary: white
-    cellpath: white
-    row_index: green_bold
-    record: white
-    list: white
-    block: white
-    hints: dark_gray
+  separator: pink
+  leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
+  header: green_bold
+  empty: blue
+  bool: white
+  int: white
+  filesize: white
+  duration: white
+  date: white
+  range: white
+  float: white
+  string: yellow
+  nothing: white
+  binary: white
+  cellpath: white
+  row_index: green_bold
+  record: white
+  list: white
+  block: white
+  hints: dark_gray
 
-    # Command syntax highlighting
-    shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: b}
-    shape_binary: purple_bold
-    shape_bool: light_cyan
-    shape_int: purple_bold
-    shape_float: purple_bold
-    shape_range: yellow_bold
-    shape_internalcall: green_bold
-    shape_external: darkorange
-    shape_externalarg: white
-    shape_external_resolved: green
-    shape_literal: red
-    shape_operator: pink
-    shape_signature: green_bold
-    shape_string: yellow
-    shape_string_interpolation: cyan_bold
-    shape_datetime: cyan_bold
-    shape_list: cyan_bold
-    shape_table: blue_bold
-    shape_record: cyan_bold
-    shape_block: blue_bold
-    shape_filepath: { fg: cyan attr: u }
-    shape_globpattern: { fg: cyan attr: u }
-    shape_variable: cyan_italic
-    shape_flag: blue_bold
-    shape_custom: green
-    shape_nothing: light_cyan
+  # Command syntax highlighting
+  shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: b}
+  shape_binary: purple_bold
+  shape_bool: light_cyan
+  shape_int: purple_bold
+  shape_float: purple_bold
+  shape_range: yellow_bold
+  shape_internalcall: green_bold
+  shape_external: darkorange
+  shape_externalarg: white
+  shape_external_resolved: green
+  shape_literal: red
+  shape_operator: pink
+  shape_signature: green_bold
+  shape_string: yellow
+  shape_string_interpolation: cyan_bold
+  shape_datetime: cyan_bold
+  shape_list: cyan_bold
+  shape_table: blue_bold
+  shape_record: cyan_bold
+  shape_block: blue_bold
+  shape_filepath: { fg: cyan attr: u }
+  shape_globpattern: { fg: cyan attr: u }
+  shape_variable: cyan_italic
+  shape_flag: blue_bold
+  shape_custom: green
+  shape_nothing: light_cyan
 }
 
 $env.config = {
@@ -95,118 +95,118 @@ $env.config = {
   use_ansi_coloring: true
   use_grid_icons: true
   menus: [
-      {
-        name: completion_menu
-        only_buffer_difference: false
-        marker: "(completion) "
-        type: {
-            layout: columnar
-            columns: 4
-            col_width: 20
-            col_padding: 2
-        }
-        style: {
-            text: green
-            selected_text: green_reverse
-            description_text: yellow
-        }
+    {
+      name: completion_menu
+      only_buffer_difference: false
+      marker: "(completion) "
+      type: {
+        layout: columnar
+        columns: 4
+        col_width: 20
+        col_padding: 2
       }
-      {
-        name: history_menu
-        only_buffer_difference: true
-        marker: "(history) "
-        type: {
-            layout: list
-            page_size: 10
-        }
-        style: {
-            text: green
-            selected_text: green_reverse
-            description_text: yellow
-        }
+      style: {
+        text: green
+        selected_text: green_reverse
+        description_text: yellow
       }
-      {
-        name: help_menu
-        only_buffer_difference: true
-        marker: "(help) "
-        type: {
-            layout: description
-            columns: 4
-            col_width: 20
-            col_padding: 2
-            selection_rows: 4
-            description_rows: 10
-        }
-        style: {
-            text: green
-            selected_text: green_reverse
-            description_text: yellow
-        }
+    }
+    {
+      name: history_menu
+      only_buffer_difference: true
+      marker: "(history) "
+      type: {
+        layout: list
+        page_size: 10
       }
-      {
-        name: commands_menu
-        only_buffer_difference: false
-        marker: "(completion) "
-        type: {
-            layout: columnar
-            columns: 4
-            col_width: 20
-            col_padding: 2
-        }
-        style: {
-            text: green
-            selected_text: green_reverse
-            description_text: yellow
-        }
-        source: { |buffer, position|
-            scope commands
+      style: {
+        text: green
+        selected_text: green_reverse
+        description_text: yellow
+      }
+    }
+    {
+      name: help_menu
+      only_buffer_difference: true
+      marker: "(help) "
+      type: {
+        layout: description
+        columns: 4
+        col_width: 20
+        col_padding: 2
+        selection_rows: 4
+        description_rows: 10
+      }
+      style: {
+        text: green
+        selected_text: green_reverse
+        description_text: yellow
+      }
+    }
+    {
+      name: commands_menu
+      only_buffer_difference: false
+      marker: "(completion) "
+      type: {
+        layout: columnar
+        columns: 4
+        col_width: 20
+        col_padding: 2
+      }
+      style: {
+        text: green
+        selected_text: green_reverse
+        description_text: yellow
+      }
+      source: { |buffer, position|
+        scope commands
+          | where command =~ $buffer
+          | each { |it| {value: $it.command description: $it.usage} }
+      }
+    }
+    {
+      name: vars_menu
+      only_buffer_difference: true
+      marker: "# "
+      type: {
+        layout: list
+        page_size: 10
+      }
+      style: {
+        text: green
+        selected_text: green_reverse
+        description_text: yellow
+      }
+      source: { |buffer, position|
+        scope variables
+          | where name =~ $buffer
+          | sort-by name
+          | each { |it| {value: $it.name description: $it.type} }
+      }
+    }
+    {
+      name: commands_with_description
+      only_buffer_difference: true
+      marker: "(commands-help) "
+      type: {
+        layout: description
+        columns: 4
+        col_width: 20
+        col_padding: 2
+        selection_rows: 4
+        description_rows: 10
+      }
+      style: {
+        text: green
+        selected_text: green_reverse
+        description_text: yellow
+      }
+      source: { |buffer, position|
+        scope commands
             | where command =~ $buffer
             | each { |it| {value: $it.command description: $it.usage} }
-        }
       }
-      {
-        name: vars_menu
-        only_buffer_difference: true
-        marker: "# "
-        type: {
-            layout: list
-            page_size: 10
-        }
-        style: {
-            text: green
-            selected_text: green_reverse
-            description_text: yellow
-        }
-        source: { |buffer, position|
-            scope variables
-            | where name =~ $buffer
-            | sort-by name
-            | each { |it| {value: $it.name description: $it.type} }
-        }
-      }
-      {
-        name: commands_with_description
-        only_buffer_difference: true
-        marker: "(commands-help) "
-        type: {
-            layout: description
-            columns: 4
-            col_width: 20
-            col_padding: 2
-            selection_rows: 4
-            description_rows: 10
-        }
-        style: {
-            text: green
-            selected_text: green_reverse
-            description_text: yellow
-        }
-        source: { |buffer, position|
-            scope commands
-            | where command =~ $buffer
-            | each { |it| {value: $it.command description: $it.usage} }
-        }
-      }
+    }
   ]
   keybindings: [
     {
