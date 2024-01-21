@@ -241,7 +241,7 @@ $env.config = {
             | uniq
             | reverse
             | str join (char -i 0)
-            | fzf --multi --scheme=history --read0 --layout=reverse --height=40% -q (commandline)
+            | fzf --multi --scheme=history --read0 --layout=reverse --height=40% --bind=change:top -q (commandline)
             | decode utf-8
             | str trim
         )"
@@ -298,7 +298,7 @@ $env.config = {
           fd
             | lines
             | str join (char -i 0)
-            | fzf --multi --scheme=path --read0 --layout=reverse --height=40%
+            | fzf --multi --scheme=path --read0 --layout=reverse --height=40% --bind=change:top
             | decode utf-8
             | lines
             | str join ' '
@@ -316,7 +316,7 @@ $env.config = {
           git branch -l --format=%(refname:short)
             | lines
             | str join (char -i 0)
-            | fzf --multi --read0 --layout=reverse --height=40%
+            | fzf --multi --read0 --layout=reverse --height=40% --bind=change:top
             | decode utf-8
             | lines
             | str join ' '
