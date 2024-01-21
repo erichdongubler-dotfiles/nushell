@@ -286,7 +286,7 @@ $env.config = {
           fd
             | lines
             | str join (char -i 0)
-            | fzf --multi --read0 --layout=reverse --height=40%
+            | fzf --multi --scheme=path --read0 --layout=reverse --height=40%
             | decode utf-8
             | lines
             | str join ' '
