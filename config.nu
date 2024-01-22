@@ -356,6 +356,8 @@ $env.config = {
 use erichdongubler clipboard clip
 use std pwd
 
+source ~/.local/share/atuin/init.nu
+
 source ~/.zoxide.nu
 
 use ~/.cache/starship/init.nu
