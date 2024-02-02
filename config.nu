@@ -248,6 +248,26 @@ $env.config = {
       }
     }
     {
+      name: history_menu
+      modifier: control
+      keycode: char_b
+      mode: [emacs, vi_normal, vi_insert]
+      event: {
+        send: executehostcommand
+        cmd: "commandline --insert (
+          history
+            | get command
+            | reverse
+            | uniq
+            | str join (char -i 0)
+            | fzf --multi --read0 --layout=reverse --height=40% --bind=change:top
+            | decode utf-8
+            | lines
+            | str join '; '
+        )"
+      }
+    }
+    {
       name: next_page
       modifier: control
       keycode: char_x
