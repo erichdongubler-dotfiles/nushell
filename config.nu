@@ -238,8 +238,8 @@ $env.config = {
         cmd: "commandline (
           history
             | get command
-            | uniq
             | reverse
+            | uniq
             | str join (char -i 0)
             | fzf --multi --scheme=history --read0 --layout=reverse --height=40% --bind=change:top -q (commandline)
             | decode utf-8
