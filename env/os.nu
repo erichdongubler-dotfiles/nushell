@@ -11,6 +11,11 @@ export def init-os-env [] {
 				])
 			}
 		}
+		"linux" => {
+			{
+				PATH: ($env.PATH | append ('~/.cargo/bin' | path expand))
+			}
+		}
 		_ => {
 			{}
 		}
