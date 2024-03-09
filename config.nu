@@ -7,8 +7,12 @@ $env.config.completions.case_sensitive = true
 $env.config.completions.external.completer = {|place|
   match $place.command.0 {
     z | zi | __zoxide_z | __zoxide_zi => {
-      $spans | skip 1 | zoxide query -l ...$in | lines | where { $in != $env.PWD }
       $place.command | skip 1 | zoxide query -l ...$in | lines | where { $in != $env.PWD }
+    }
+    git => {
+      carapace $place.command.0 nushell ...$place.command
+        | from json
+        | if ($in | default [] | where value =~ '^-.*ERR$' | is-empty) { $in } else { null }
     }
     _ => null
   }
