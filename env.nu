@@ -12,6 +12,10 @@ let init_jobs = [
 		init-atuin
 	}
 	{
+		use $ENV_DIR carapace init-carapace
+		init-carapace
+	}
+	{
 		use $ENV_DIR zoxide init-zoxide
 		init-zoxide
 	}
