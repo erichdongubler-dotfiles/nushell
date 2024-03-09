@@ -60,6 +60,19 @@ $env.config = {
     case_sensitive: true
     quick: true
     partial: true
+    external: {
+      enable: true
+      max_results: 100
+      completer: {|spans|
+        match $spans.0 {
+          _ => {
+            carapace $spans.0 nushell ...$spans
+              | from json
+              | if ($in | default [] | where value =~ '^-.*ERR$' | is-empty) { $in } else { null }
+          }
+        }
+      }
+    }
   }
   cursor_shape: {
     emacs: underscore
@@ -365,3 +378,5 @@ let esc = "\u{001B}"
 $env.PROMPT_COMMAND = $env.PROMPT_COMMAND | prepend ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
 $env.PROMPT_INDICATOR_VI_INSERT = { "" }
 $env.PROMPT_INDICATOR_VI_NORMAL = { "" }
+
+source ~/.cache/carapace/init.nu

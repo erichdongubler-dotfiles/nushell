@@ -30,3 +30,6 @@ init-zoxide
 
 use ([($nu.env-path | path dirname) env starship.nu] | path join) init-starship
 init-starship
+
+use ([($nu.env-path | path dirname) env carapace.nu] | path join) init-carapace
+init-carapace | load-env
