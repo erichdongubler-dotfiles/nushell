@@ -21,6 +21,10 @@ use $ENV_DIR atuin init-atuin
 init-atuin
 hide init-atuin
 
+use $ENV_DIR carapace init-carapace
+init-carapace | load-env
+ hide init-carapace
+
 use $ENV_DIR zoxide init-zoxide
 init-zoxide
 hide init-zoxide
