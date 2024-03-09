@@ -9,6 +9,11 @@ $env.config.completions.external.completer = {|spans|
     z | zi | __zoxide_z | __zoxide_zi => {
       $spans | skip 1 | zoxide query -l ...$in | lines | where { $in != $env.PWD }
     }
+    git => {
+      carapace $spans.0 nushell ...$spans
+        | from json
+        | if ($in | default [] | where value =~ '^-.*ERR$' | is-empty) { $in } else { null }
+    }
     _ => null
   }
 }
@@ -288,6 +293,8 @@ use $SCRIPTS_DIR erichdongubler jj
 use $ENV_DIR atuin ATUIN_INIT_PATH
 source $ATUIN_INIT_PATH
 hide ATUIN_INIT_PATH
+
+source ~/.cache/carapace/init.nu
 
 use $ENV_DIR zoxide ZOXIDE_INIT_PATH
 source $ZOXIDE_INIT_PATH
