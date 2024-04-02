@@ -235,7 +235,7 @@ $env.config = {
       mode: [emacs, vi_normal, vi_insert]
       event: {
         send: executehostcommand
-        cmd: "commandline (
+        cmd: "commandline edit --replace (
           history
             | get command
             | reverse
@@ -254,7 +254,7 @@ $env.config = {
       mode: [emacs, vi_normal, vi_insert]
       event: {
         send: executehostcommand
-        cmd: "commandline --insert (
+        cmd: "commandline edit --insert (
           history
             | get command
             | reverse
@@ -314,7 +314,7 @@ $env.config = {
       mode: [emacs, vi_insert]
       event: {
         send: executehostcommand
-        cmd: "commandline --insert (
+        cmd: "commandline edit --insert (
           fd
             | lines
             | str join (char -i 0)
@@ -332,7 +332,7 @@ $env.config = {
       mode: [emacs, vi_insert]
       event: {
         send: executehostcommand
-        cmd: "commandline --insert (
+        cmd: "commandline edit --insert (
           git branch -l --format=%(refname:short)
             | lines
             | str join (char -i 0)
