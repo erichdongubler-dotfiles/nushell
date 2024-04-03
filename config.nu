@@ -353,7 +353,7 @@ $env.config = {
   ]
 }
 
-use erichdongubler clipboard clip
+use ([($nu.config-path | path dirname) scripts erichdongubler] | path join) clipboard clip
 use std pwd
 
 source ~/.local/share/atuin/init.nu
