@@ -1,19 +1,25 @@
 export def init-os-env [] {
+	use std
+
 	match $nu.os-info.name {
 		"macos" => {
-			{
-				PATH: ($env.PATH | split row (char esep) | append [
-					('~/.local/bin' | path expand)
-					'/opt/homebrew/bin'
-					'/Users/mozilla/.cargo/bin'
-					'/Users/mozilla/Library/Python/3.9/bin'
-					'/Users/mozilla/Library/Python/3.10/bin'
-				])
+			with-env { PATH: $env.PATH } {
+				std path add '~/.local/bin'
+				std path add '/opt/homebrew/bin'
+				std path add '/Users/mozilla/.cargo/bin'
+				std path add '/Users/mozilla/Library/Python/3.9/bin'
+				std path add '/Users/mozilla/Library/Python/3.10/bin'
+				{
+					PATH: $env.PATH
+				}
 			}
 		}
 		"linux" => {
-			{
-				PATH: ($env.PATH | append ('~/.cargo/bin' | path expand))
+			with-env { PATH: $env.PATH } {
+				std path add --append '~/.cargo/bin'
+				{
+					PATH: $env.PATH
+				}
 			}
 		}
 		_ => {
