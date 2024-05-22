@@ -234,7 +234,7 @@ $env.config = {
       keycode: char_r
       mode: [emacs, vi_normal, vi_insert]
       event: {
-        send: executehostcommand
+        send: ExecuteHostCommand
         cmd: "commandline edit --replace (
           history
             | get command
@@ -253,7 +253,7 @@ $env.config = {
       keycode: char_b
       mode: [emacs, vi_normal, vi_insert]
       event: {
-        send: executehostcommand
+        send: ExecuteHostCommand
         cmd: "commandline edit --insert (
           history
             | get command
@@ -313,7 +313,7 @@ $env.config = {
       keycode: char_f
       mode: [emacs, vi_insert]
       event: {
-        send: executehostcommand
+        send: ExecuteHostCommand
         cmd: "commandline edit --insert (
           fd
             | lines
@@ -331,7 +331,7 @@ $env.config = {
       keycode: char_g
       mode: [emacs, vi_insert]
       event: {
-        send: executehostcommand
+        send: ExecuteHostCommand
         cmd: "commandline edit --insert (
           git branch -l --format=%(refname:short)
             | lines
