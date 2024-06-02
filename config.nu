@@ -81,13 +81,19 @@ $env.config = {
     sync_on_enter: true
   }
   ls: {
-    clickable_links: true
     use_ls_colors: true
   }
   rm: {
     always_trash: false
   }
-  shell_integration: false # Once we get better support, we can enable this: https://github.com/nushell/nushell/issues/5585
+  shell_integration: {
+    osc2: true
+    osc7: true
+    osc8: true # clickable file links in `ls` output
+    osc133: true
+    osc633: true
+    reset_application_mode: true
+  }
   show_banner: false,
   table: {
     mode: rounded
