@@ -41,7 +41,7 @@ $env.config = (
 export def init-atuin [] {
 	let atuin_path = "~/.local/share/atuin/init.nu"
 
-	mkdir ($atuin_path | path dirname)
+	mkdir ($atuin_path | path dirname | path expand)
 	atuin init nu --disable-up-arrow | save --force $atuin_path
 	echo $ctrl_b_handler | save --append $atuin_path
 }
