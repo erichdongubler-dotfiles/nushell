@@ -23,7 +23,9 @@ export def init-os-env [] {
 			}
 		}
 		_ => {
-			{}
+			{
+				PATH: $env.PATH
+			}
 		}
 	}
 }
