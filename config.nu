@@ -379,6 +379,7 @@ $env.config = {
             | str join (char -i 0)
             | fzf
               --multi
+              --scheme=path
               --read0
               --layout=reverse
               --height=40%
