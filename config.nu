@@ -54,6 +54,7 @@ let default_theme = {
 }
 
 $env.config = {
+  bracketed_paste: true
   color_config: $default_theme
   completions: {
     algorithm: prefix
