@@ -285,6 +285,7 @@ $env.config = {
             | str join (char -i 0)
             | fzf
               --multi
+              --scheme=history
               --read0
               --layout=reverse
               --height=40%
