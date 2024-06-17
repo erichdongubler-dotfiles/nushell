@@ -172,7 +172,7 @@ $env.config = {
     {
       name: vars_menu
       only_buffer_difference: true
-      marker: "# "
+      marker: "(variables) "
       type: {
         layout: list
         page_size: 10
