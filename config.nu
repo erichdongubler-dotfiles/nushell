@@ -2,60 +2,79 @@
 # <https://github.com/nushell/nushell/blob/main/docs/sample_config/default_config.nu> where
 # possible. Of course, I have some of my own changes on top of it I like. :)
 
-let default_theme = {
-  separator: pink
-  leading_trailing_space_bg: { attr: n } # no fg, no bg, attr none effectively turns this off
-  header: green_bold
-  empty: blue
-  bool: white
-  int: white
-  filesize: white
-  duration: white
-  date: white
-  range: white
-  float: white
-  string: yellow
-  nothing: white
-  binary: white
-  cellpath: white
-  row_index: green_bold
-  record: white
-  list: white
-  block: white
-  hints: dark_gray
+const sublime_aqua = "#66d9ef"
+const sublime_green = "#a6e22d"
+const sublime_offwhite = "#f8f8f2"
+const sublime_orange = "#fd9720"
+const sublime_pink = "#f92772"
+const sublime_purple = "#ae81ff"
+const sublime_yellow = '#e6db74'
+const sublime_darkgray = "dark_gray"
 
-  # Command syntax highlighting
-  shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: b}
-  shape_binary: purple_bold
-  shape_bool: light_cyan
-  shape_int: purple_bold
-  shape_float: purple_bold
-  shape_range: yellow_bold
-  shape_internalcall: green_bold
-  shape_external: darkorange
-  shape_externalarg: white
-  shape_external_resolved: green
-  shape_literal: red
-  shape_operator: pink
-  shape_signature: green_bold
-  shape_string: yellow
-  shape_string_interpolation: cyan_bold
-  shape_datetime: cyan_bold
-  shape_list: cyan_bold
-  shape_table: blue_bold
-  shape_record: cyan_bold
-  shape_block: blue_bold
-  shape_filepath: { fg: cyan attr: u }
-  shape_globpattern: { fg: cyan attr: u }
-  shape_variable: cyan_italic
-  shape_flag: blue_bold
-  shape_custom: green
-  shape_nothing: light_cyan
+let sublime_monokai_theme = {
+  separator: $sublime_darkgray
+  leading_trailing_space_bg: { attr: "n" }
+  header: { fg: $sublime_green attr: "b" }
+  empty: $sublime_aqua
+  bool: $sublime_purple
+  int: $sublime_purple
+  filesize: $sublime_purple
+  duration: $sublime_purple
+  date: $sublime_purple
+  range: $sublime_purple
+  float: $sublime_purple
+  string: $sublime_yellow
+  nothing: $sublime_purple
+  binary: $sublime_purple
+  cellpath: $sublime_offwhite
+  row_index: { fg: $sublime_green attr: "b" }
+  record: $sublime_offwhite
+  list: $sublime_offwhite
+  block: $sublime_offwhite
+  hints: $sublime_darkgray
+  search_result: { fg: $sublime_offwhite bg: $sublime_offwhite }
+
+  shape_binary: { fg: $sublime_purple attr: "b" }
+  shape_block: { fg: $sublime_aqua attr: "b" }
+  shape_bool: $sublime_purple
+  shape_custom: $sublime_green
+  shape_datetime: { fg: $sublime_purple attr: "b" }
+  shape_directory: { fg: $sublime_yellow attr: "iu" }
+  shape_external: { fg: $sublime_orange attr: "i" }
+  shape_externalarg: { fg: $sublime_yellow attr: "i" }
+  shape_filepath: { fg: $sublime_yellow attr: "i" }
+  shape_flag: { fg: $sublime_orange attr: "b" }
+  shape_float: { fg: $sublime_purple attr: "b" }
+  shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: "b" }
+  shape_globpattern: { fg: $sublime_purple attr: "i" }
+  shape_int: { fg: $sublime_purple attr: "b" }
+  shape_internalcall: { fg: $sublime_aqua attr: "b" }
+  shape_list: { fg: $sublime_offwhite attr: "b" }
+  shape_literal: $sublime_aqua
+  shape_match_pattern: $sublime_green
+  shape_matching_brackets: { attr: "u" }
+  shape_nothing: $sublime_purple
+  shape_operator: $sublime_pink
+  shape_pipe: { fg: $sublime_pink attr: "b" }
+  shape_range: { fg: $sublime_orange attr: "b" }
+  shape_record: { fg: $sublime_purple attr: "b" }
+  shape_redirection: { fg: $sublime_pink attr: "b" }
+  shape_signature: { fg: $sublime_green attr: "b" }
+  shape_string: $sublime_yellow
+  shape_string_interpolation: { fg: $sublime_purple attr: "b" }
+  shape_table: { fg: $sublime_offwhite attr: "b" }
+  shape_var: $sublime_pink
+  shape_vardecl: $sublime_offwhite
+  shape_variable: $sublime_purple
+
+  background: "#272822"
+  foreground: $sublime_offwhite
+  cursor: $sublime_offwhite
 }
 
 $env.config = {
   bracketed_paste: true
-  color_config: $default_theme
+  color_config: $sublime_monokai_theme
   completions: {
     algorithm: prefix
     case_sensitive: true
