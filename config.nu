@@ -90,7 +90,6 @@ $env.config = {
     osc2: true
     osc7: true
     osc8: true # clickable file links in `ls` output
-    osc133: true
     osc633: true
     reset_application_mode: true
   }
