@@ -32,3 +32,7 @@ hide init-starship
 export const SCRIPTS_DIR = ($nu.config-path | path dirname | path join scripts)
 # NOTE: No need to `mkdir` or `touch …/mod.nu` here, since this should be created by my dotfiles
 # history.
+
+const COMPLETIONS_DIR = ($nu.data-dir | path join completions)
+mkdir $COMPLETIONS_DIR
+touch ($COMPLETIONS_DIR | path join mod.nu)
