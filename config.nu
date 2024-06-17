@@ -392,6 +392,7 @@ $env.config = {
   ]
 }
 
+use $SCRIPTS_DIR erichdongubler ansi *
 use $SCRIPTS_DIR erichdongubler clipboard clip
 
 use $ENV_DIR atuin ATUIN_INIT_PATH
