@@ -381,7 +381,7 @@ $env.config = {
   ]
 }
 
-use ([($nu.config-path | path dirname) scripts erichdongubler] | path join) clipboard clip
+use $SCRIPTS_DIR erichdongubler clipboard clip
 use std pwd
 
 use $ENV_DIR atuin ATUIN_INIT_PATH

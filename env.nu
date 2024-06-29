@@ -24,3 +24,5 @@ init-zoxide
 
 use $ENV_DIR starship init-starship
 init-starship
+
+export const SCRIPTS_DIR = ($nu.config-path | path dirname | path join scripts)
