@@ -356,7 +356,7 @@ $env.config = {
       event: {
         send: ExecuteHostCommand
         cmd: "commandline edit --insert (
-          git branch -l --format=%(refname:short)
+          git branch -l "--format=%(refname:short)"
             | lines
             | str join (char -i 0)
             | fzf
