@@ -62,6 +62,7 @@ $env.config = {
     partial: true
     external: {
       enable: true
+      max_results: 100
       completer: {|spans|
         match $spans.0 {
           _ => null
