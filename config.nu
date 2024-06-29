@@ -60,6 +60,14 @@ $env.config = {
     case_sensitive: true
     quick: true
     partial: true
+    external: {
+      enable: true
+      completer: {|spans|
+        match $spans.0 {
+          _ => null
+        }
+      }
+    }
   }
   cursor_shape: {
     emacs: underscore
