@@ -9,10 +9,6 @@ $env.ENV_CONVERSIONS = {
 	}
 }
 
-$env.NU_PLUGIN_DIRS = [
-	($nu.default-config-dir | path join 'plugins')
-]
-
 $env.EDITOR = "nvim"
 
 use ([($nu.env-path | path dirname) env os.nu] | path join) init-os-env
