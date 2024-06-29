@@ -386,12 +386,15 @@ use std pwd
 
 use $ENV_DIR atuin ATUIN_INIT_PATH
 source $ATUIN_INIT_PATH
+hide ATUIN_INIT_PATH
 
 use $ENV_DIR zoxide ZOXIDE_INIT_PATH
 source $ZOXIDE_INIT_PATH
+hide ZOXIDE_INIT_PATH
 
 use $ENV_DIR starship STARSHIP_INIT_PATH
 use $STARSHIP_INIT_PATH
+hide STARSHIP_INIT_PATH
 let esc = "\u{001B}"
 $env.PROMPT_COMMAND = $env.PROMPT_COMMAND | prepend ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
 $env.PROMPT_INDICATOR_VI_INSERT = { "" }
