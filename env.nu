@@ -13,14 +13,14 @@ $env.EDITOR = "nvim"
 
 export const ENV_DIR = ($nu.env-path | path dirname | path join env)
 
-use ($ENV_DIR | path join os.nu) init-os-env
+use $ENV_DIR os init-os-env
 init-os-env | load-env
 
-use ($ENV_DIR | path join atuin.nu) init-atuin
+use $ENV_DIR atuin init-atuin
 init-atuin
 
-use ($ENV_DIR | path join zoxide.nu) init-zoxide
+use $ENV_DIR zoxide init-zoxide
 init-zoxide
 
-use ($ENV_DIR | path join starship.nu) init-starship
+use $ENV_DIR starship init-starship
 init-starship
