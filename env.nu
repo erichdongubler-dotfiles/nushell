@@ -11,14 +11,16 @@ $env.ENV_CONVERSIONS = {
 
 $env.EDITOR = "nvim"
 
-use ([($nu.env-path | path dirname) env os.nu] | path join) init-os-env
+export const ENV_DIR = ($nu.env-path | path dirname | path join env)
+
+use ($ENV_DIR | path join os.nu) init-os-env
 init-os-env | load-env
 
-use ([($nu.env-path | path dirname) env atuin.nu] | path join) init-atuin
+use ($ENV_DIR | path join atuin.nu) init-atuin
 init-atuin
 
-use ([($nu.env-path | path dirname) env zoxide.nu] | path join) init-zoxide
+use ($ENV_DIR | path join zoxide.nu) init-zoxide
 init-zoxide
 
-use ([($nu.env-path | path dirname) env starship.nu] | path join) init-starship
+use ($ENV_DIR | path join starship.nu) init-starship
 init-starship
