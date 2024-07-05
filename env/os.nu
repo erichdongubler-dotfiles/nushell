@@ -4,6 +4,7 @@ export def init-os-env [] {
 	let paths = match $nu.os-info.name {
 		"macos" => [
 			'~/.local/bin'
+			'/opt/homebrew/opt/rustup/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
 			'~/Library/pnpm/bin'
@@ -12,6 +13,7 @@ export def init-os-env [] {
 		]
 		"linux" => [
 			'~/.local/bin'
+			'/home/linuxbrew/.linuxbrew/opt/rustup/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
 			'~/.local/share/pnpm/bin'
