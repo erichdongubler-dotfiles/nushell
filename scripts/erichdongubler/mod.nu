@@ -1,4 +1,4 @@
-export module clipboard.nu
+export module backup.nu
 export module find-up.nu
 export module jj.nu
 export module nvim-server-web.nu
