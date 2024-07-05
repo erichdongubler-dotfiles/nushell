@@ -1,5 +1,7 @@
 use std log
 
+alias "jj bkmk" = jj bookmark
+
 export def "blame-stack" [
   --list,
   ...files: string,
