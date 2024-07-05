@@ -2,6 +2,8 @@ use std/log
 
 use (path self './gh.nu') [GH_IDENT_RE, GH_OWNER_AND_REPO_RE]
 
+const EFFECTIVE_WC_REVSET = "heads(@- | present(@ ~ empty()))"
+
 export def "advance" [
   bookmark: string@"nu-complete jj bookmark list"
 ] {
@@ -137,8 +139,9 @@ export def "fixup" [
 }
 
 export def "gh pr push" [
-  pr_ish: string,
-  --repo: string,
+  # TODO: check this
+  pr_ish: oneof<string, nothing> = null,
+  --repo: oneof<string, nothing> = null,
 ] {
   use std/log [] # set up `log` cmd. state
 
@@ -214,6 +217,16 @@ export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
 
+export def "promote" [
+  --revisions(-r): string = (["immutable()..(" $EFFECTIVE_WC_REVSET ")"] | str join),
+] {
+  let straggler_revset = ([
+    "roots(reachable(" $revisions ", mutable()) ~ (immutable()..(" $revisions ")))"
+  ] | str join)
+
+  jj rebase --source $straggler_revset --after $"heads\(($revisions)\)"
+}
+
 # Creates a new revert of either `@` (if not empty) or `@-`.
 export def "reversi" [] {
   if not (wc-is-empty) {
@@ -242,14 +255,45 @@ def "wc-is-empty" []: nothing -> bool {
   jj log --no-graph --revisions '@' --template "self.empty()" | into bool
 }
 
-# Push a new (randomized) bookmark for the single provided revision.
+# Push new (randomized) bookmark(s) for heads of the provided revisions.
 export def "yeet" [
   --revisions (-r): string = $EFFECTIVE_WC_REVSET,
-  # The revision to push.
+  # Revision(s) to push.
   #
   # The name is plural to be consistent with other CLIs.
 ] {
+  yeet push --revisions $revisions
+}
+
+# Push all unsync'd work with random branch names.
+#
+# A convenience wrapper for `yeet` that attempts to push all unsynchronized work found via the
+# following revset:
+#
+# ```
+# mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))
+# ```
+export def "yeet all" [
+] {
+  yeet push --revisions 'mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))'
+}
+
+def "yeet push" [
+  --revisions: oneof<string, nothing> = null,
+] {
   use erichdongubler/random
-  let name = $"erichdongubler-push-(random phrase | str join '-')"
-  jj git push --named $"($name)=($revisions)"
+  (
+    jj log
+      --revisions (['heads(' $revisions ')' ] | str join)
+      --no-graph
+      --template 'change_id.shortest() ++ "\n"'
+  )
+    | each --flatten {|change_id|
+      let name = $"erichdongubler-push-(random phrase | str join '-')"
+      [
+        '--named'
+        $"($name)=($change_id)"
+      ]
+    }
+    | jj git push ...$in
 }
