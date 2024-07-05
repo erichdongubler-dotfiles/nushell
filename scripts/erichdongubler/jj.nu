@@ -8,13 +8,20 @@ export def "advance" [
 
 export def --wrapped "blame-stack" [
   --fileset: string,
+  --fileset-pattern: oneof<nothing, string>@"nu-complete blame-stack fileset pattern" = null,
   --revisions (-r): string = 'immutable()..@',
   --template (-T): string = 'erichdongubler_preferred()',
   ...args
 ] {
   use std/log [] # set up `log` cmd. state
 
-  let revset = $"--revisions=($revisions) & files\(($fileset | to nuon)\)"
+  let pattern_prefix = if $fileset_pattern == null {
+    ""
+  } else {
+    $"($fileset_pattern):"
+  }
+
+  let revset = $"--revisions=($revisions) & files\(($pattern_prefix)($fileset | to nuon)\)"
 
   let args = [log $revset --template $template ...$args]
 
@@ -74,7 +81,14 @@ export def "gh pr push" [
       --json headRepositoryOwner,headRepository,headRefName
       $pr_ish
       ...$args
-  ) | from json
+  )
+  if $env.LAST_EXIT_CODE != 0 {
+    error make --unspanned {
+      msg: "failed to fetch pull request metadata; maybe the ref. or auth. are incorrect?"
+    }
+  }
+  let pr_view = $pr_view | from json
+
   let branch_name = $pr_view.headRefName
   let repo = $pr_view.headRepository.name
   let owner = $pr_view.headRepositoryOwner.login
@@ -95,7 +109,20 @@ export def "gh pr push" [
   run-external $bin ...$args
 }
 
-# NOTE: This is `export`ed for the sake of `CTRL + G` completion.
+def "nu-complete blame-stack fileset pattern" [] {
+  [
+    ""
+    "cwd"
+    "file"
+    "cwd-file"
+    "glob"
+    "cwd-glob"
+    "root"
+    "root-file"
+    "root-glob"
+  ]
+}
+
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
@@ -107,6 +134,17 @@ export def "reversi" [] {
   }
   jj revert --revisions '@-' --before '@'
   jj describe '@-' --message ''
+}
+
+# Rebases the specified revisions to be parents `@` and children of the first immutable commits in
+# `@`'s lineage.
+export def "restring" [
+  --revisions(-r): oneof<string, nothing> = null,
+  --before(-B): oneof<string, nothing> = null,
+] {
+  let before = $before | default '@'
+  let after = $"roots\(immutable\(\)..\(($before)\)\)-"
+  jj rebase --revisions $revisions --before $before --after $after
 }
 
 export def "util gen-completions nushell" [] {
