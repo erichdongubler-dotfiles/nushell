@@ -41,6 +41,10 @@ export def --wrapped "blame-stack" [
 }
 
 # Clone `upstream` and add `origin` as another repo, with the latter being treated as a fork.
+#
+# - `--upstream` must be of the format `<owner>/<repo>`.
+# - `--origin` must be of the format `<owner>[/<repo>]`. If `repo` is omitted, then the same `repo`
+#   name from `--upstream` is assumed.
 export def --wrapped "git clone-contrib" [
   --upstream: oneof<string, nothing> = null,
   --origin: oneof<string, nothing> = null,
@@ -54,6 +58,11 @@ export def --wrapped "git clone-contrib" [
     | each {|upstream|
       if ($upstream =~ $'^($GH_OWNER_AND_REPO_RE)$') {
         return $'https://github.com/($upstream)'
+      } else {
+        error make {
+          msg: "`--upstream` should be of the format `<owner>/<repo>`"
+          span: (metadata $upstream).span
+        }
       }
     }
     | default {
@@ -83,6 +92,13 @@ export def --wrapped "git clone-contrib" [
       }
       if ($origin =~ $GH_OWNER_AND_REPO_RE) {
         return $'git@github.com:($origin)'
+      } else {
+        error make {
+          msg: "`--upstream` should be of the format `<owner>[/<repo>]`"
+          label: {
+            span: (metadata $origin).span
+          }
+        }
       }
     }
     | default {
@@ -139,8 +155,9 @@ export def "fixup" [
 }
 
 export def "gh pr push" [
-  pr_ish: string,
-  --repo: string,
+  # TODO: check this
+  pr_ish: oneof<string, nothing> = null,
+  --repo: oneof<string, nothing> = null,
 ] {
   use std/log [] # set up `log` cmd. state
 
@@ -216,6 +233,16 @@ export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
 
+export def "promote" [
+  --revisions(-r): string = (["immutable()..(" $EFFECTIVE_WC_REVSET ")"] | str join),
+] {
+  let straggler_revset = ([
+    "roots(reachable(" $revisions ", mutable()) ~ (immutable()..(" $revisions ")))"
+  ] | str join)
+
+  jj rebase --source $straggler_revset --after $"heads\(($revisions)\)"
+}
+
 # Creates a new revert of either `@` (if not empty) or `@-`.
 export def "reversi" [] {
   if not (wc-is-empty) {
@@ -244,14 +271,62 @@ def "wc-is-empty" []: nothing -> bool {
   jj log --no-graph --revisions '@' --template "self.empty()" | into bool
 }
 
-# Push a new (randomized) bookmark for the single provided revision.
+# Push new (randomized) bookmark(s) for heads of the provided revisions.
 export def "yeet" [
   --revisions (-r): string = $EFFECTIVE_WC_REVSET,
-  # The revision to push.
+  # Revision(s) to push.
   #
   # The name is plural to be consistent with other CLIs.
+  --allow-empty-description,
+] {
+  (
+    yeet push
+      --revisions $revisions
+      --allow-empty-description=$allow_empty_description
+  )
+}
+
+# Push all unsync'd work with random branch names.
+#
+# A convenience wrapper for `yeet` that attempts to push all unsynchronized work found via the
+# following revset:
+#
+# ```
+# mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))
+# ```
+export def "yeet all" [
+  --allow-empty-description
+] {
+  (
+    yeet push
+      --revisions 'mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))'
+      --allow-empty-description=$allow_empty_description
+  )
+}
+
+def "yeet push" [
+  --revisions: oneof<string, nothing> = null,
+  --allow-empty-description,
 ] {
   use erichdongubler/random
-  let name = $"erichdongubler-push-(random phrase | str join '-')"
-  jj git push --named $"($name)=($revisions)"
+  (
+    jj log
+      --revisions (['heads(' $revisions ')' ] | str join)
+      --no-graph
+      --template 'change_id.shortest() ++ "\n"'
+  )
+    | lines
+    | each --flatten {|change_id|
+      let name = $"erichdongubler-push-(random phrase | str join '-')"
+      [
+        '--named'
+        $"($name)=($change_id)"
+      ]
+    }
+    | if $allow_empty_description {
+      $in | prepend ['--allow-empty-description']
+    } else {
+      $in
+    }
+    | jj git push ...$in
 }

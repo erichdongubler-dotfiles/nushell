@@ -6,22 +6,27 @@ export def init-os-env [] {
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
+			'~/Library/pnpm/bin'
 			'/opt/homebrew/bin'
 		]
 		"linux" => [
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
+			'~/.local/share/pnpm/bin'
 			'/home/linuxbrew/.linuxbrew/bin'
 		]
 		"android" => [
 			'~/.local/bin'
 			'~/.cargo/bin'
+			'~/.volta/bin'
+			'~/.local/share/pnpm/bin'
 		]
 		"windows" => [
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
+			'~/.local/share/pnpm/bin'
 		]
 		_ => []
 	}
