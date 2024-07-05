@@ -651,6 +651,39 @@ def "workspace roots" [
   }
 }
 
+export def "workspace fix-root-path" [
+] {
+  use std/assert
+  use std/log
+
+  try {
+    jj workspace root --name default
+    log info "no problematic root path found for `default`"
+    exit 1
+  } catch {
+    log debug "problematic root path found"
+  }
+
+  log debug "confirming we're in the `default` workspace…"
+  let cwd_workspace = (workspace roots).cwd_workspace
+  if $cwd_workspace.name != 'default' {
+    error make --unspanned {
+      msg: ''
+    }
+  }
+  assert ($cwd_workspace.root == '')
+  log debug "confirmed we're in the `default` workspace"
+
+  let index_file_path = '.jj/repo/workspace_store/index'
+  log debug $"writing fix to `default` workspace's `($index_file_path)`…"
+  cd (jj workspace root)
+  assert (not ($index_file_path | path exists)) $"`($index_file_path)` already exists, unsure what to do"
+  mkdir ($index_file_path | path dirname)
+  "\x0a\x11\x0a\x07default\x12\x06../../" o> $index_file_path
+
+  log info $"wrote fix to: ($index_file_path | path expand)"
+}
+
 # Push new (randomized) bookmark(s) for heads of the provided revisions.
 export def "yeet" [
   --revisions (-r): string = $EFFECTIVE_WC_REVSET,
