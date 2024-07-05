@@ -305,6 +305,7 @@ $env.config = {
             | str join (char -i 0)
             | fzf
               --multi
+              --scheme=history
               --read0
               --layout=reverse
               --height=40%
@@ -392,6 +393,7 @@ $env.config = {
             | str join (char -i 0)
             | fzf
               --multi
+              --scheme=path
               --read0
               --layout=reverse
               --height=40%
@@ -412,7 +414,10 @@ $env.config = {
   ]
 }
 
+use $SCRIPTS_DIR erichdongubler ansi *
 use $SCRIPTS_DIR erichdongubler clipboard clip
+
+use $COMPLETIONS_DIR *
 
 use $ENV_DIR atuin ATUIN_INIT_PATH
 source $ATUIN_INIT_PATH
