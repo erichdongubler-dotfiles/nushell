@@ -1,9 +1,15 @@
 use std/log
 
+export def "advance" [
+  bookmark: string@"nu-complete jj bookmark list"
+] {
+  jj bookmark move $bookmark --to $"($bookmark)+"
+}
 
 export def "blame-stack" [
   --list,
   ...files: string,
+  --revisions: string = 'immutable()..@'
 ] {
   if ($files | is-empty) {
     error make {
@@ -16,7 +22,7 @@ export def "blame-stack" [
   }
 
   let file_clause = $files | each { $"files\(\"($in)\"\)" } | str join ' | '
-  let revset = $"--revisions=immutable\(\)..@ & \(($file_clause)\)"
+  let revset = $"--revisions=($revisions) & \(($file_clause)\)"
 
   let template = if $list {
     '--template=separate("\n", erichdongubler_preferred(), self.diff().summary())'
@@ -27,4 +33,77 @@ export def "blame-stack" [
   let args = [log $revset $template]
   log debug $"Running `jj ($args | each { $"'($in)'"} | str join ' ')`"
   jj ...$args
+}
+
+export def "git by-remote push" [
+  branches_by_repo_path: record,
+  --force,
+] {
+  let repo_paths = $branches_by_repo_path | columns
+  for repo_path in $repo_paths {
+    let branches = $branches_by_repo_path | get $repo_path
+
+    let ref_pushes = git ref-pushes ...$branches
+
+    let cmd = "git"
+    mut args = []
+    if $force {
+      $args = $args | prepend "--force"
+    }
+    $args = $args | append $ref_pushes
+
+    run-external $cmd ...$args
+  }
+}
+
+export def "git ref-pushes" [
+  ...branches: string
+] {
+  if ($branches | is-empty) {
+    error make {
+      msg: "no branches were specified"
+      label: {
+        text: ""
+        span: (metadata $branches).span
+      }
+    }
+  }
+
+  $branches | each {|branch|
+    let commits = jj log --no-graph --template 'self.commit_id() ++ "\n"' --revisions $branch | lines
+    let commit = match ($commits | length)  {
+      1 => { $commits | first }
+      0 => {
+        error make {
+          msg: "revset does not refer to any changes"
+          label: {
+            text: ""
+            span: (metadata $branch).span
+          }
+        }
+      }
+      _ => {
+        error make {
+          msg: "revset refers to more than one change"
+          label: {
+            text: ""
+            span: (metadata $branch).span
+          }
+        }
+      }
+    }
+
+    $"($commit):($branch)"
+  }
+}
+
+export def "nu-complete jj bookmark list" [] {
+  jj bookmark list --template 'name ++ "\n"' | lines | uniq
+}
+
+export def "util gen-completions nushell" [] {
+  jj util completion nushell o> ([
+    ($nu.vendor-autoload-dirs | where { ".local/share" in $in } | first)
+    'jj-completion.nu'
+  ] | path join)
 }
