@@ -73,7 +73,14 @@ export def "gh pr push" [
       --json headRepositoryOwner,headRepository,headRefName
       $pr_ish
       ...$args
-  ) | from json
+  )
+  if $env.LAST_EXIT_CODE != 0 {
+    error make --unspanned {
+      msg: "failed to fetch pull request metadata; maybe the ref. or auth. are incorrect?"
+    }
+  }
+  let pr_view = $pr_view | from json
+
   let branch_name = $pr_view.headRefName
   let repo = $pr_view.headRepository.name
   let owner = $pr_view.headRepositoryOwner.login
@@ -110,6 +117,16 @@ def "nu-complete blame-stack fileset pattern" [] {
 
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
+}
+
+# Creates a new revert of either `@` (if not empty) or `@-`.
+export def "reversi" [] {
+  let wc_is_empty = jj log --no-graph --revisions '@' --template "self.empty()" | into bool
+  if not $wc_is_empty {
+    jj new
+  }
+  jj revert --revisions '@-' --before '@'
+  jj describe '@-' --message ''
 }
 
 export def "util gen-completions nushell" [] {
