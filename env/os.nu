@@ -6,7 +6,7 @@ export def init-os-env [] {
 			with-env { PATH: $env.PATH } {
 				std path add '~/.local/bin'
 				std path add '/opt/homebrew/bin'
-				std path add '/Users/mozilla/.cargo/bin'
+				std path add '~/.cargo/bin'
 				std path add '/Users/mozilla/Library/Python/3.9/bin'
 				std path add '/Users/mozilla/Library/Python/3.10/bin'
 				{
