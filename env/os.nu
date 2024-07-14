@@ -7,6 +7,7 @@ export def init-os-env [] {
 				std path add '~/.local/bin'
 				std path add '/opt/homebrew/bin'
 				std path add '~/.cargo/bin'
+				std path add '~/.volta/bin'
 				{
 					PATH: $env.PATH
 				}
