@@ -109,7 +109,6 @@ $env.config = {
   table: {
     mode: rounded
   }
-  use_ansi_coloring: true
   use_grid_icons: true
   menus: [
     {
