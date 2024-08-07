@@ -406,6 +406,10 @@ use $ENV_DIR starship STARSHIP_INIT_PATH
 use $STARSHIP_INIT_PATH
 hide STARSHIP_INIT_PATH
 let esc = "\u{001B}"
-$env.PROMPT_COMMAND = $env.PROMPT_COMMAND | prepend ([$esc "]9;9;" ('.' | path expand) $esc '\'] | str join)
+let old_prompt = $env.PROMPT_COMMAND
+$env.PROMPT_COMMAND = {
+  print --no-newline $'($esc)]9;9;('.' | path expand)($esc)\'
+  do $old_prompt
+}
 $env.PROMPT_INDICATOR_VI_INSERT = { "" }
 $env.PROMPT_INDICATOR_VI_NORMAL = { "" }
