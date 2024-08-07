@@ -109,7 +109,6 @@ $env.config = {
   table: {
     mode: rounded
   }
-  use_grid_icons: true
   menus: [
     {
       name: completion_menu
