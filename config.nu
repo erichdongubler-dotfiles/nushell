@@ -405,10 +405,9 @@ hide ZOXIDE_INIT_PATH
 use $ENV_DIR starship STARSHIP_INIT_PATH
 use $STARSHIP_INIT_PATH
 hide STARSHIP_INIT_PATH
-let esc = "\u{001B}"
 let old_prompt = $env.PROMPT_COMMAND
 $env.PROMPT_COMMAND = {
-  print --no-newline $'($esc)]9;9;('.' | path expand)($esc)\'
+  print --no-newline $'(ansi esc)]9;9;('.' | path expand)(ansi esc)\'
   do $old_prompt
 }
 $env.PROMPT_INDICATOR_VI_INSERT = { "" }
