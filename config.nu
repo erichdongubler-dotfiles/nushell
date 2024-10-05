@@ -226,6 +226,13 @@ $env.config = {
   ]
   keybindings: [
     {
+      name: unix_enter
+      modifier: control
+      keycode: char_j
+      mode: [emacs vi_normal vi_insert]
+      event: { send: enter }
+    }
+    {
       name: completion_menu
       modifier: none
       keycode: tab
