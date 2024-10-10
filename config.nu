@@ -368,27 +368,35 @@ $env.config = {
       }
     }
     {
-      name: git_refs
+      name: version_control_refs
       modifier: control
       keycode: char_g
       mode: [emacs, vi_insert]
       event: {
         send: ExecuteHostCommand
-        cmd: "commandline edit --insert (
-          git branch -l "--format=%(refname:short)"
-            | lines
-            | str join (char -i 0)
-            | fzf
-              --multi
-              --scheme=path
-              --read0
-              --layout=reverse
-              --height=40%
-              --bind=change:top
-            | decode utf-8
-            | lines
-            | str join ' '
-        )"
+        cmd: "
+          use erichdongubler find-up
+
+          let name = find-up with {
+            ".git": {
+              git branch -l "--format=%(refname:short)" | lines
+            }
+          }
+
+          commandline edit --insert (
+            $name
+              | str join (char -i 0)
+              | fzf
+                --multi
+                --scheme=path
+                --read0
+                --layout=reverse
+                --height=40%
+                --bind=change:top
+              | decode utf-8
+              | lines
+              | str join ' '
+          )"
       }
     }
     {
