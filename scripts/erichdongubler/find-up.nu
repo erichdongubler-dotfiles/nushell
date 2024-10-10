@@ -38,3 +38,17 @@ export def main [names: list<string>, --path: path = '.'] -> path? {
     $path = $parent_path
   }
 }
+
+export def with [routing: record] {
+  let names = $routing | columns
+  let found = main $names
+
+  if $found == null {
+    error make --unspanned {
+      msg: $"failed to find any marker files in ($names | to nuon)"
+    }
+  }
+
+  let name = $found | path basename
+  return (do ($routing | get $name) $found)
+}
