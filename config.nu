@@ -378,6 +378,9 @@ $env.config = {
           use erichdongubler find-up
 
           let name = find-up with {
+            ".jj": {
+              jj bookmark list --template 'name ++ "\n"' | lines | uniq
+            }
             ".git": {
               git branch -l "--format=%(refname:short)" | lines
             }
