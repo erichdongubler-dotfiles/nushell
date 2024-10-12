@@ -4,6 +4,7 @@ use std/log
 export def "blame-stack" [
   --list,
   ...files: string,
+  --revisions: string = 'immutable()..@'
 ] {
   if ($files | is-empty) {
     error make {
@@ -16,7 +17,7 @@ export def "blame-stack" [
   }
 
   let file_clause = $files | each { $"files\(\"($in)\"\)" } | str join ' | '
-  let revset = $"--revisions=immutable\(\)..@ & \(($file_clause)\)"
+  let revset = $"--revisions=($revisions) & \(($file_clause)\)"
 
   let template = if $list {
     '--template=separate("\n", erichdongubler_preferred(), self.diff().summary())'
