@@ -414,6 +414,7 @@ $env.config = {
 }
 
 use $SCRIPTS_DIR erichdongubler clipboard clip
+use $SCRIPTS_DIR erichdongubler jj
 
 use $ENV_DIR atuin ATUIN_INIT_PATH
 source $ATUIN_INIT_PATH
