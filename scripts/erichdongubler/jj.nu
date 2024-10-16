@@ -4,6 +4,16 @@ export def "blame-stack" [
   --list,
   ...files: string,
 ] {
+  if ($files | is-empty) {
+    error make {
+      msg: "no files specified"
+      label:{
+        text: ""
+        span: (metadata $files).span
+      }
+    }
+  }
+
   let file_clause = $files | each { $"file\(\"($in)\"\)" } | str join ' | '
   let revset = $"--revisions=immutable\(\)..@ & \(($file_clause)\)"
 
