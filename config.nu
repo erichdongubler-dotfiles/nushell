@@ -85,7 +85,7 @@ $env.config = {
     format: "auto"
   }
   float_precision: 2
-  footer_mode: "25" # always, never, number_of_rows, auto
+  footer_mode: 25 # always, never, number_of_rows, auto
   highlight_resolved_externals: true
   history: {
     file_format: "sqlite"
