@@ -15,7 +15,7 @@ export def "blame-stack" [
     }
   }
 
-  let file_clause = $files | each { $"file\(\"($in)\"\)" } | str join ' | '
+  let file_clause = $files | each { $"files\(\"($in)\"\)" } | str join ' | '
   let revset = $"--revisions=immutable\(\)..@ & \(($file_clause)\)"
 
   let template = if $list {
