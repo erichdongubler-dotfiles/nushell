@@ -37,6 +37,27 @@ export def "blame-stack" [
   jj ...$args
 }
 
+export def "git by-remote push" [
+  branches_by_repo_path: record,
+  --force,
+] {
+  let repo_paths = $branches_by_repo_path | columns
+  for repo_path in $repo_paths {
+    let branches = $branches_by_repo_path | get $repo_path
+
+    let ref_pushes = git ref-pushes ...$branches
+
+    let cmd = "git"
+    mut args = ["push"]
+    if $force {
+      $args = $args | append "--force"
+    }
+    $args = $args | append $ref_pushes
+
+    run-external $cmd ...$args
+  }
+}
+
 export def "git ref-pushes" [
   ...branches: string
 ] {
