@@ -40,3 +40,10 @@ export def "blame-stack" [
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --template 'name ++ "\n"' | lines | uniq
 }
+
+export def "util gen-completions nushell" [] {
+  jj util completion nushell o> ([
+    ($nu.vendor-autoload-dirs | where { ".local/share" in $in } | first)
+    'jj-completion.nu'
+  ] | path join)
+}
