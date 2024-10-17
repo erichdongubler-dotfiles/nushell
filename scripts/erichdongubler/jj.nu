@@ -28,3 +28,10 @@ export def "blame-stack" [
   log debug $"Running `jj ($args | each { $"'($in)'"} | str join ' ')`"
   jj ...$args
 }
+
+export def "util gen-completions nushell" [] {
+  jj util completion nushell o> ([
+    ($nu.vendor-autoload-dirs | where { ".local/share" in $in } | first)
+    'jj-completion.nu'
+  ] | path join)
+}
