@@ -35,6 +35,47 @@ export def "blame-stack" [
   jj ...$args
 }
 
+export def "git ref-pushes" [
+  ...branches: string
+] {
+  if ($branches | is-empty) {
+    error make {
+      msg: "no branches were specified"
+      label: {
+        text: ""
+        span: (metadata $branches).span
+      }
+    }
+  }
+
+  $branches | each {|branch|
+    let commits = jj log --no-graph --template 'self.commit_id() ++ "\n"' --revisions $branch | lines
+    let commit = match ($commits | length)  {
+      1 => { $commits | first }
+      0 => {
+        error make {
+          msg: "revset does not refer to any changes"
+          label: {
+            text: ""
+            span: (metadata $branch).span
+          }
+        }
+      }
+      _ => {
+        error make {
+          msg: "revset refers to more than one change"
+          label: {
+            text: ""
+            span: (metadata $branch).span
+          }
+        }
+      }
+    }
+
+    $"($commit):($branch)"
+  }
+}
+
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --template 'name ++ "\n"' | lines | uniq
 }
