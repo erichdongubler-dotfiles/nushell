@@ -376,10 +376,11 @@ $env.config = {
         send: ExecuteHostCommand
         cmd: "
           use erichdongubler find-up
+          use erichdongubler jj
 
           let name = find-up with {
             ".jj": {
-              jj bookmark list --template 'name ++ "\n"' | lines | uniq
+              jj nu-complete jj bookmark list
             }
             ".git": {
               git branch -l "--format=%(refname:short)" | lines
