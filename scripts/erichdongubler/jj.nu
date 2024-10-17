@@ -62,3 +62,7 @@ export def "gh pr push" [
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
+
+export def "util gen-completions nushell" [] {
+  jj util completion nushell o> $'($nu.default-config-dir)/autoload/jj-completion.nu'
+}
