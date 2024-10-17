@@ -1,4 +1,5 @@
-use std log
+use std/log
+
 
 export def "blame-stack" [
   --list,
