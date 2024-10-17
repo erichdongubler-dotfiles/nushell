@@ -28,3 +28,7 @@ export def "blame-stack" [
   log debug $"Running `jj ($args | each { $"'($in)'"} | str join ' ')`"
   jj ...$args
 }
+
+export def "nu-complete jj bookmark list" [] {
+  jj bookmark list --template 'name ++ "\n"' | lines | uniq
+}
