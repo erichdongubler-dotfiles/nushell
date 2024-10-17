@@ -1,5 +1,10 @@
 use std/log
 
+export def "advance" [
+  bookmark: string@"nu-complete jj bookmark list"
+] {
+  jj bookmark move $bookmark --to $"($bookmark)+"
+}
 
 export def "blame-stack" [
   --list,
