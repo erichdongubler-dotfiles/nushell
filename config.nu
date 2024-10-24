@@ -103,6 +103,7 @@ $env.config = {
     osc2: true
     osc7: true
     osc8: true # clickable file links in `ls` output
+    osc133: false # needed to avoid newlines on each keystroke: <https://github.com/nushell/nushell/issues/5585>
     osc633: true
     reset_application_mode: true
   }
