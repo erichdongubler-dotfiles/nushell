@@ -11,6 +11,8 @@ export def "blame-stack" [
   ...files: string,
   --revisions: string = 'immutable()..@'
 ] {
+  use std/log [] # set up `log` cmd. state
+
   if ($files | is-empty) {
     error make {
       msg: "no files specified"

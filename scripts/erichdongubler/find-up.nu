@@ -12,6 +12,8 @@ use std/log
 #   with both `.hg` and `.git` would return the path to the `.hg`
 #   marker.
 export def main [names: list<string>, --path: path = '.'] -> path? {
+  use std/log [] # set up `log` cmd. state
+
   mut path = $path | path expand
 
   loop {
