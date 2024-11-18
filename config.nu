@@ -176,70 +176,6 @@ $env.config = {
         description_text: yellow
       }
     }
-    {
-      name: commands_menu
-      only_buffer_difference: false
-      marker: "(completion) "
-      type: {
-        layout: columnar
-        columns: 4
-        col_width: 20
-        col_padding: 2
-      }
-      style: {
-        text: green
-        selected_text: green_reverse
-        description_text: yellow
-      }
-      source: { |buffer, position|
-        scope commands
-          | where command =~ $buffer
-          | each { |it| {value: $it.command description: $it.usage} }
-      }
-    }
-    {
-      name: vars_menu
-      only_buffer_difference: true
-      marker: "(variables) "
-      type: {
-        layout: list
-        page_size: 10
-      }
-      style: {
-        text: green
-        selected_text: green_reverse
-        description_text: yellow
-      }
-      source: { |buffer, position|
-        scope variables
-          | where name =~ $buffer
-          | sort-by name
-          | each { |it| {value: $it.name description: $it.type} }
-      }
-    }
-    {
-      name: commands_with_description
-      only_buffer_difference: true
-      marker: "(commands-help) "
-      type: {
-        layout: description
-        columns: 4
-        col_width: 20
-        col_padding: 2
-        selection_rows: 4
-        description_rows: 10
-      }
-      style: {
-        text: green
-        selected_text: green_reverse
-        description_text: yellow
-      }
-      source: { |buffer, position|
-        scope commands
-            | where command =~ $buffer
-            | each { |it| {value: $it.command description: $it.usage} }
-      }
-    }
   ]
   keybindings: [
     {
@@ -338,27 +274,6 @@ $env.config = {
           { edit: undo }
         ]
       }
-    }
-    {
-      name: commands_menu
-      modifier: control
-      keycode: char_t
-      mode: [emacs, vi_normal, vi_insert]
-      event: { send: menu name: commands_menu }
-    }
-    {
-      name: vars_menu
-      modifier: control
-      keycode: char_y
-      mode: [emacs, vi_normal, vi_insert]
-      event: { send: menu name: vars_menu }
-    }
-    {
-      name: commands_with_description
-      modifier: control
-      keycode: char_u
-      mode: [emacs, vi_normal, vi_insert]
-      event: { send: menu name: commands_with_description }
     }
     {
       name: files
