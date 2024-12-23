@@ -11,7 +11,10 @@ use std/log
 #   For example, searching for `['.hg' '.git']` in a directory
 #   with both `.hg` and `.git` would return the path to the `.hg`
 #   marker.
-export def main [names: list<string>, --path: path = '.'] -> path? {
+export def main [names: list<string>, --path: path = '.']: [
+  nothing -> path
+  nothing -> nothing
+] {
   use std/log [] # set up `log` cmd. state
 
   mut path = $path | path expand
@@ -39,6 +42,8 @@ export def main [names: list<string>, --path: path = '.'] -> path? {
 
     $path = $parent_path
   }
+
+  return null
 }
 
 export def with [routing: record] {
