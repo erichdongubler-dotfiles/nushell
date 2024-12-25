@@ -74,10 +74,6 @@ $env.config.bracketed_paste = true
 $env.config.color_config = $sublime_monokai_theme
 $env.config.completions.algorithm = "prefix"
 $env.config.completions.case_sensitive = true
-$env.config.completions.quick = true
-$env.config.completions.partial = true
-$env.config.completions.external.enable = true
-$env.config.completions.external.max_results = 100
 $env.config.completions.external.completer = {|spans|
   match $spans.0 {
     z | zi | __zoxide_z | __zoxide_zi => {
@@ -91,23 +87,13 @@ $env.config.cursor_shape.vi_insert = "line"
 $env.config.cursor_shape.vi_normal = "block"
 $env.config.edit_mode = "vi"
 $env.config.filesize.unit = "binary"
-$env.config.float_precision = 2
-$env.config.footer_mode = 25 # always, never, number_of_rows, auto
 $env.config.highlight_resolved_externals = true
 $env.config.history.file_format = "sqlite"
 $env.config.history.isolation = true
 $env.config.history.max_size = 10_000
-$env.config.history.sync_on_enter = true
-$env.config.ls.use_ls_colors = true
 $env.config.rm.always_trash = false
-$env.config.shell_integration.osc2 = true
-$env.config.shell_integration.osc7 = true
-$env.config.shell_integration.osc8 = true # clickable file links in `ls` output
 $env.config.shell_integration.osc133 = false # needed to avoid newlines on each keystroke: <https://github.com/nushell/nushell/issues/5585>
-$env.config.shell_integration.osc633 = true
-$env.config.shell_integration.reset_application_mode = true
 $env.config.show_banner = false
-$env.config.table.mode = "rounded"
 
 $env.config.menus = [
   {
