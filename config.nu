@@ -1,3 +1,4 @@
+use std/config dark-theme
 
 const sublime_aqua = "#66d9ef"
 const sublime_green = "#a6e22d"
@@ -8,7 +9,7 @@ const sublime_purple = "#ae81ff"
 const sublime_yellow = '#e6db74'
 const sublime_darkgray = "dark_gray"
 
-let sublime_monokai_theme = {
+let sublime_monokai_theme = dark-theme | merge deep {
   separator: $sublime_darkgray
   leading_trailing_space_bg: { attr: "n" }
   header: { fg: $sublime_green attr: "b" }
