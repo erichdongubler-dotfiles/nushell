@@ -1,6 +1,3 @@
-# NOTE: I'm trying to keep this in sync with
-# <https://github.com/nushell/nushell/blob/main/docs/sample_config/default_config.nu> where
-# possible. Of course, I have some of my own changes on top of it I like. :)
 
 const sublime_aqua = "#66d9ef"
 const sublime_green = "#a6e22d"
