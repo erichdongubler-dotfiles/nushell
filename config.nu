@@ -24,7 +24,7 @@ let sublime_monokai_theme = dark-theme | merge deep {
   string: $sublime_yellow
   nothing: $sublime_purple
   binary: $sublime_purple
-  cellpath: $sublime_offwhite
+  "cell-path": $sublime_offwhite
   row_index: { fg: $sublime_green attr: "b" }
   record: $sublime_offwhite
   list: $sublime_offwhite
@@ -44,9 +44,11 @@ let sublime_monokai_theme = dark-theme | merge deep {
   shape_flag: { fg: $sublime_orange attr: "b" }
   shape_float: { fg: $sublime_purple attr: "b" }
   shape_garbage: { fg: "#FFFFFF" bg: "#FF0000" attr: "b" }
+  shape_glob_interpolation: { fg: $sublime_purple attr: "i" }
   shape_globpattern: { fg: $sublime_purple attr: "i" }
   shape_int: { fg: $sublime_purple attr: "b" }
   shape_internalcall: { fg: $sublime_aqua attr: "b" }
+  shape_keyword: { fg: $sublime_aqua attr: "b" }
   shape_list: { fg: $sublime_offwhite attr: "b" }
   shape_literal: $sublime_aqua
   shape_match_pattern: $sublime_green
@@ -61,9 +63,9 @@ let sublime_monokai_theme = dark-theme | merge deep {
   shape_string: $sublime_yellow
   shape_string_interpolation: { fg: $sublime_purple attr: "b" }
   shape_table: { fg: $sublime_offwhite attr: "b" }
-  shape_var: $sublime_pink
   shape_vardecl: $sublime_offwhite
   shape_variable: $sublime_purple
+  shape_raw_string: $sublime_purple
 
   background: "#272822"
   foreground: $sublime_offwhite
