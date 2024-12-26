@@ -77,7 +77,7 @@ $env.config.completions.case_sensitive = true
 $env.config.completions.external.completer = {|spans|
   match $spans.0 {
     z | zi | __zoxide_z | __zoxide_zi => {
-      $spans | skip 1 | zoxide query -l ...$in | lines | where {|x| $x != $env.PWD}
+      $spans | skip 1 | zoxide query -l ...$in | lines | where { $in != $env.PWD }
     }
     _ => null
   }
