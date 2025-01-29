@@ -81,8 +81,7 @@ $env.config = {
   }
   edit_mode: vi
   filesize: {
-    metric: false
-    format: "auto"
+    unit: "binary",
   }
   float_precision: 2
   footer_mode: 25 # always, never, number_of_rows, auto
