@@ -37,6 +37,17 @@ export def "blame-stack" [
   jj ...$args
 }
 
+export def "gh pr push" [
+  pr_ish: string,
+] {
+  let pr_view = gh pr view --json headRepositoryOwner,headRepository,headRefName $pr_ish | from json
+  let branch_name = $pr_view.headRefName
+  let repo = $pr_view.headRepository.name
+  let owner = $pr_view.headRepositoryOwner.login
+  let local_branch_rev = jj rev-parse $branch_name
+  git push --force $'git@github.com:($owner)/($repo).git' $'($local_branch_rev):($branch_name)'
+}
+
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --template 'name ++ "\n"' | lines | uniq
 }
