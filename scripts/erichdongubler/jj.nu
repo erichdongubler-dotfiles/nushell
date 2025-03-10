@@ -22,6 +22,12 @@ export def --wrapped "blame-stack" [
   jj ...$args
 }
 
+export def "fixup" [
+  --revisions (-r): string = "@-",
+] {
+  jj commit --message (jj fixup-line $revisions)
+}
+
 export def "gh pr push" [
   pr_ish: string,
   --repo: string,
