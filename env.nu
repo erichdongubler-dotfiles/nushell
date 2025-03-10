@@ -2,11 +2,11 @@ $env.EDITOR = "nvim"
 
 export const ENV_DIR = ($nu.env-path | path dirname | path join env)
 
+use $ENV_DIR os init-os-env
+init-os-env | load-env
+hide init-os-env
+
 let init_jobs = [
-	{
-		use $ENV_DIR os init-os-env
-		init-os-env
-	}
 	{
 		use $ENV_DIR atuin init-atuin
 		init-atuin
