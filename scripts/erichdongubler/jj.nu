@@ -49,5 +49,5 @@ export def "gh pr push" [
 }
 
 export def "nu-complete jj bookmark list" [] {
-  jj bookmark list --template 'name ++ "\n"' | lines | uniq
+  jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
