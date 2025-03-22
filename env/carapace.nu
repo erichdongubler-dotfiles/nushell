@@ -2,6 +2,7 @@ export const CARAPACE_INIT_PATH = ($nu.cache-dir | path join carapace init.nu)
 
 export def init-carapace [] {
 	mkdir ($CARAPACE_INIT_PATH | path dirname)
+	touch $CARAPACE_INIT_PATH
 
 	try {
 		which carapace
