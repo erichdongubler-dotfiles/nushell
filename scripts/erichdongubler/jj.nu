@@ -23,7 +23,7 @@ export def "blame-stack" [
     }
   }
 
-  let file_clause = $files | each { $"files\(\"($in)\"\)" } | str join ' | '
+  let file_clause = $files | $"files\((each { $in | to nuon } | str join ' | ')\)"
   let revset = $"--revisions=($revisions) & \(($file_clause)\)"
 
   let template = if $list {
