@@ -18,7 +18,7 @@ export def --wrapped "blame-stack" [
 
   let args = [log $revset --template $template ...$args]
 
-  log debug $"Running `jj ($args | each { $"'($in)'"} | str join ' ')`"
+  log debug $"Running `jj ($args | each { to nuon } | str join ' ')`"
   jj ...$args
 }
 
