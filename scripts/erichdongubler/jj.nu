@@ -6,22 +6,17 @@ export def "advance" [
   jj bookmark move $bookmark --to $"($bookmark)+"
 }
 
-export def "blame-stack" [
-  --list,
+export def --wrapped "blame-stack" [
   --fileset: string,
   --revisions (-r): string = 'immutable()..@',
+  --template (-T): string = 'erichdongubler_preferred()',
+  ...args
 ] {
   use std/log [] # set up `log` cmd. state
 
-  let template = if $list {
-    '--template=separate("\n", erichdongubler_preferred(), self.diff().summary())'
-  } else {
-    '--template=erichdongubler_preferred()'
-  }
-
   let revset = $"--revisions=($revisions) & files\(($fileset | to nuon)\)"
 
-  let args = [log $revset $template]
+  let args = [log $revset --template $template ...$args]
 
   log debug $"Running `jj ($args | each { $"'($in)'"} | str join ' ')`"
   jj ...$args
