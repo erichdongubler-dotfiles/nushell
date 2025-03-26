@@ -39,8 +39,13 @@ export def "blame-stack" [
 
 export def "gh pr push" [
   pr_ish: string,
+  --repo: string,
 ] {
-  let pr_view = gh pr view --json headRepositoryOwner,headRepository,headRefName $pr_ish | from json
+  mut args = []
+  if $repo != null {
+    $args = $args | append [--repo $repo]
+  }
+  let pr_view = gh pr view --json headRepositoryOwner,headRepository,headRefName $pr_ish ...$args | from json
   let branch_name = $pr_view.headRefName
   let repo = $pr_view.headRepository.name
   let owner = $pr_view.headRepositoryOwner.login
