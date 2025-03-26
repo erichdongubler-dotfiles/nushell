@@ -9,7 +9,7 @@ export def "advance" [
 export def "blame-stack" [
   --list,
   ...files: string,
-  --revisions (-r): string = 'immutable()..@'
+  --revisions (-r): string = 'immutable()..@',
 ] {
   use std/log [] # set up `log` cmd. state
 
