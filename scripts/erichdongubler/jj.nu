@@ -8,23 +8,10 @@ export def "advance" [
 
 export def "blame-stack" [
   --list,
-  ...files: string,
+  --fileset: string,
   --revisions (-r): string = 'immutable()..@',
 ] {
   use std/log [] # set up `log` cmd. state
-
-  if ($files | is-empty) {
-    error make {
-      msg: "no files specified"
-      label:{
-        text: ""
-        span: (metadata $files).span
-      }
-    }
-  }
-
-  let file_clause = $files | $"files\((each { $in | to nuon } | str join ' | ')\)"
-  let revset = $"--revisions=($revisions) & \(($file_clause)\)"
 
   let template = if $list {
     '--template=separate("\n", erichdongubler_preferred(), self.diff().summary())'
@@ -32,7 +19,10 @@ export def "blame-stack" [
     '--template=erichdongubler_preferred()'
   }
 
+  let revset = $"--revisions=($revisions) & files\(($fileset | to nuon)\)"
+
   let args = [log $revset $template]
+
   log debug $"Running `jj ($args | each { $"'($in)'"} | str join ' ')`"
   jj ...$args
 }
