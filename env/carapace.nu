@@ -5,6 +5,7 @@ export def init-carapace [] {
 	touch $CARAPACE_INIT_PATH
 
 	if (which carapace | is-empty) {
+		echo '# Carapace not detected, so this stub was created.' | save --force $CARAPACE_INIT_PATH
 		return
 	}
 
