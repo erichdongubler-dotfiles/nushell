@@ -4,9 +4,7 @@ export def init-carapace [] {
 	mkdir ($CARAPACE_INIT_PATH | path dirname)
 	touch $CARAPACE_INIT_PATH
 
-	try {
-		which carapace
-	} catch {
+	if (which carapace | is-empty) {
 		return
 	}
 
