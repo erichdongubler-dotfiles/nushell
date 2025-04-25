@@ -9,7 +9,12 @@ export def init-carapace [] {
 		return
 	}
 
-	carapace _carapace nushell | save --force $CARAPACE_INIT_PATH
+	mut output = carapace _carapace nushell
+	# NOTE: Necessary until `carapace`'s output catches up with the Nushel 0.105.0's change in
+	# closure handling for `default`.
+	$output = $output | str replace 'default $carapace_completer' 'default { $carapace_completer }' --all
+	$output | save --force $CARAPACE_INIT_PATH
+
 	{
 		CARAPACE_BRIDGES: 'zsh,fish,bash,inshellisense'
 	}
