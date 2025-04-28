@@ -23,6 +23,10 @@ let init_jobs = [
 		use $ENV_DIR starship init-starship
 		init-starship
 	}
+	{
+		use $ENV_DIR starship gen-completions-starship
+		gen-completions-starship
+	}
 ]
 $init_jobs | par-each --threads ($init_jobs | length) {
   do $in | default {}
