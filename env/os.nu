@@ -42,6 +42,7 @@ export def init-os-env [] {
 
 	{
 		SHELL: $nu.current-exe
+		MOZ_AVOID_JJ_VCS: 0
 		PATH: $env_vars
 	}
 }
