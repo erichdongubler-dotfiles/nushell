@@ -1,7 +1,8 @@
 export def init-os-env [] {
 	use std
 
-	match $nu.os-info.name {
+	{
+	} | merge (match $nu.os-info.name {
 		"macos" => {
 			with-env { PATH: $env.PATH } {
 				(
@@ -53,5 +54,5 @@ export def init-os-env [] {
 				PATH: $env.PATH
 			}
 		}
-	}
+	})
 }
