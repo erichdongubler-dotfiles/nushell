@@ -1,7 +1,9 @@
 export def init-os-env [] {
 	use std
 
-	match $nu.os-info.name {
+	{
+		MOZ_AVOID_JJ_VCS: 0
+	} | merge (match $nu.os-info.name {
 		"macos" => {
 			with-env { PATH: $env.PATH } {
 				std path add '/opt/homebrew/bin'
@@ -40,5 +42,5 @@ export def init-os-env [] {
 				PATH: $env.PATH
 			}
 		}
-	}
+	})
 }
