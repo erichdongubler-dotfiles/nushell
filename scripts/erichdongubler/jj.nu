@@ -31,7 +31,10 @@ export def "bookmark resolve" [
       self.added_targets().filter(|t| !t.hidden()).map(|t| separate(" ", self.name(), t.commit_id().short()) ++ "\n")
     )
   '
-  let bookmarks_with_single_visible_added_target = jj bookmark list --conflicted --template $template | parse '{bookmark} {commit}'
+  let bookmarks_with_single_visible_added_target = (
+    jj bookmark list --conflicted --template $template
+      | parse '{bookmark} {commit}'
+  )
   for entry in $bookmarks_with_single_visible_added_target {
     jj bookmark set $entry.bookmark --revision $entry.commit
   }
@@ -51,7 +54,13 @@ export def "gh pr push" [
   if $repo != null {
     $args = $args | append [--repo $repo]
   }
-  let pr_view = gh pr view --json headRepositoryOwner,headRepository,headRefName $pr_ish ...$args | from json
+  let pr_view = (
+    gh pr view
+      --json headRepositoryOwner,headRepository,headRefName
+      $pr_ish
+      ...$args
+      | from json
+  )
   let branch_name = $pr_view.headRefName
   let repo = $pr_view.headRepository.name
   let owner = $pr_view.headRepositoryOwner.login
