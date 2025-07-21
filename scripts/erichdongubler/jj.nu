@@ -8,13 +8,18 @@ export def "advance" [
 
 export def --wrapped "blame-stack" [
   --fileset: string,
+  --fileset-pattern: oneof<nothing, string>@"nu-complete blame-stack fileset pattern" = null,
   --revisions (-r): string = 'immutable()..@',
   --template (-T): string = 'erichdongubler_preferred()',
   ...args
 ] {
   use std/log [] # set up `log` cmd. state
 
-  let revset = $"--revisions=($revisions) & files\(($fileset | to nuon)\)"
+  let pattern_prefix = $fileset_pattern
+    | each { $"($in):" }
+    | default ""
+
+  let revset = $"--revisions=($revisions) & files\(($pattern_prefix)($fileset | to nuon)\)"
 
   let args = [log $revset --template $template ...$args]
 
@@ -105,6 +110,19 @@ export def "hoist" [
     }
   }
   jj rebase --revisions $revisions --before $"roots\(immutable\(\)..\(($before)\)\)"
+}
+
+def "nu-complete blame-stack fileset pattern" [] {
+  [
+    "cwd"
+    "file"
+    "cwd-file"
+    "glob"
+    "cwd-glob"
+    "root"
+    "root-file"
+    "root-glob"
+  ]
 }
 
 # NOTE: This is `export`ed for the sake of `CTRL + G` completion.
