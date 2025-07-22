@@ -56,6 +56,11 @@ export def "gh pr push" [
   if $repo != null {
     $args = $args | append [--repo $repo]
   }
+
+  load-env {
+    GIT_DIR: (jj git root)
+  }
+
   let pr_view = (
     gh pr view
       --json headRepositoryOwner,headRepository,headRefName
@@ -68,6 +73,9 @@ export def "gh pr push" [
   let owner = $pr_view.headRepositoryOwner.login
   let local_branch_rev = jj rev-parse $branch_name
 
+  load-env {
+    GIT_WORK_TREE: (jj workspace root)
+  }
 
   let bin = 'git'
   let args = [
