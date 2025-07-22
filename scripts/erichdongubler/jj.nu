@@ -80,7 +80,8 @@ export def "gh pr push" [
   run-external $bin ...$args
 }
 
-def "nu-complete jj bookmark list" [] {
+# NOTE: This is `export`ed for the sake of `CTRL + G` completion.
+export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
 
