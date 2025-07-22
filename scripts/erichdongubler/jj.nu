@@ -50,6 +50,8 @@ export def "gh pr push" [
   pr_ish: string,
   --repo: string,
 ] {
+  use std/log [] # set up `log` cmd. state
+
   mut args = []
   if $repo != null {
     $args = $args | append [--repo $repo]
@@ -65,7 +67,17 @@ export def "gh pr push" [
   let repo = $pr_view.headRepository.name
   let owner = $pr_view.headRepositoryOwner.login
   let local_branch_rev = jj rev-parse $branch_name
-  git push --force $'git@github.com:($owner)/($repo).git' $'($local_branch_rev):($branch_name)'
+
+
+  let bin = 'git'
+  let args = [
+    push
+    --force
+    $'git@github.com:($owner)/($repo).git'
+    $'($local_branch_rev):($branch_name)'
+  ]
+  log info $"Running `([$bin ...$args] | str join ' ')`"
+  run-external $bin ...$args
 }
 
 def "nu-complete jj bookmark list" [] {
