@@ -66,8 +66,7 @@ export def "gh pr push" [
       --json headRepositoryOwner,headRepository,headRefName
       $pr_ish
       ...$args
-      | from json
-  )
+  ) | from json
   let branch_name = $pr_view.headRefName
   let repo = $pr_view.headRepository.name
   let owner = $pr_view.headRepositoryOwner.login
