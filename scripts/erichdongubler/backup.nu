@@ -21,7 +21,12 @@ export def "diff shallow" [
   --local: oneof<directory, nothing> = null,
   --remote: directory,
 ] {
-  let resolved = check-dirs $dir --local $local --remote $remote
+  check-dirs $dir --local $local --remote $remote | impl diff shallow
+}
+
+def "impl diff shallow" [
+]: record<dir: string, local: directory, local_root: directory, remote: directory, remote_root: directory> -> any {
+  let resolved = $in
   let dir = $resolved.dir
   let local = $resolved.local
   let remote = $resolved.remote
