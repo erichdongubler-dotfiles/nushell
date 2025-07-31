@@ -16,6 +16,30 @@ def "check-dirs" [
   }
 }
 
+export def "copy-missing" [
+  dir: string,
+  --local: oneof<directory, nothing> = null,
+  --remote: directory,
+  --to: string@"nu-complete local-or-remote" = "remote",
+] {
+  let resolved = check-dirs $dir --local $local --remote $remote
+
+  let files = $resolved
+    | impl diff shallow
+    | lines
+    | where (($it | str starts-with '-') and (not ($it | str starts-with '---')))
+    | str replace --regex '^-' ''
+    | ls ...$in
+    | where $it.type == file
+    | get name
+
+  for file in $files {
+    let target_path = $'F:/($file)'
+    mkdir --verbose ($target_path | path dirname)
+    cp --verbose $file $'F:/($target_path)'
+  }
+}
+
 export def "diff shallow" [
   dir: string,
   --local: oneof<directory, nothing> = null,
@@ -50,4 +74,11 @@ def "impl diff shallow" [
   do $fs_entries 'remote' $resolved.remote_root o> remote.list
 
   git diff --no-index local.list remote.list
+}
+
+def "nu-complete local-or-remote" [] {
+  [
+    "local"
+    "remote"
+  ]
 }
