@@ -1,3 +1,4 @@
+export module backup.nu
 export module find-up.nu
 export module gh.nu
 export module jj.nu
