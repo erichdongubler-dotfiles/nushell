@@ -88,7 +88,14 @@ export def "gh pr push" [
       --json headRepositoryOwner,headRepository,headRefName
       $pr_ish
       ...$args
-  ) | from json
+  )
+  if $env.LAST_EXIT_CODE != 0 {
+    error make --unspanned {
+      msg: "failed to fetch pull request metadata; maybe the ref. or auth. are incorrect?"
+    }
+  }
+  let pr_view = $pr_view | from json
+
   let branch_name = $pr_view.headRefName
   let repo = $pr_view.headRepository.name
   let owner = $pr_view.headRepositoryOwner.login
