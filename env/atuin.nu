@@ -43,8 +43,6 @@ $env.config = (
 # Creates an `init.nu` file via `atuin init …` at `ATUIN_INIT_PATH`.
 export def init-atuin [] {
 	mkdir ($ATUIN_INIT_PATH | path dirname)
-	atuin init nu --disable-up-arrow
-		| str replace 'get -i' 'get -o' --all # NOTE: avoid warning with `nu` 0.106 and later
-		| save --force $ATUIN_INIT_PATH
+	atuin init nu --disable-up-arrow | save --force $ATUIN_INIT_PATH
 	echo $ctrl_b_handler | save --append $ATUIN_INIT_PATH
 }
