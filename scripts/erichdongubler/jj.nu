@@ -92,6 +92,16 @@ export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
 
+# Creates a new revert of either `@` (if not empty) or `@-`.
+export def "reversi" [] {
+  let wc_is_empty = jj log --no-graph --revisions '@' --template "self.empty()" | into bool
+  if not $wc_is_empty {
+    jj new
+  }
+  jj revert --revisions '@-' --before '@'
+  jj describe '@-' --message ''
+}
+
 export def "util gen-completions nushell" [] {
   jj util completion nushell o> $'($nu.default-config-dir)/autoload/jj-completion.nu'
 }
