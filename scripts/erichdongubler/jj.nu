@@ -116,3 +116,12 @@ export def "util gen-completions nushell" [] {
 def "wc-is-empty" []: nothing -> bool {
   jj log --no-graph --revisions '@' --template "self.empty()" | into bool
 }
+
+export def "yeet" [
+  --revisions (-r): oneof<string, nothing> = null,
+] {
+  use erichdongubler/random
+  let revisions = $revisions | default { effective-wc }
+  let name = $"erichdongubler-push-(random phrase | str join '-')"
+  jj git push --named $"($name)=($revisions)"
+}
