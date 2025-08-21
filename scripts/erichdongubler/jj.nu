@@ -95,3 +95,7 @@ export def "nu-complete jj bookmark list" [] {
 export def "util gen-completions nushell" [] {
   jj util completion nushell o> $'($nu.default-config-dir)/autoload/jj-completion.nu'
 }
+
+def "wc-is-empty" []: nothing -> bool {
+  jj log --no-graph --revisions '@' --template "self.empty()" | into bool
+}
