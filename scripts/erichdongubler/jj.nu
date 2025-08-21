@@ -40,6 +40,14 @@ export def "bookmark resolve" [
   }
 }
 
+def "effective-wc" []: nothing -> string {
+  if (wc-is-empty) {
+    '@-'
+  } else {
+    '@'
+  }
+}
+
 export def "fixup" [
   --revisions (-r): string = "@-",
 ] {
