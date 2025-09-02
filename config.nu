@@ -283,6 +283,7 @@ $env.config.keybindings = [
 ]
 
 use $SCRIPTS_DIR erichdongubler jj
+use std/clip
 
 use $ENV_DIR atuin ATUIN_INIT_PATH
 source $ATUIN_INIT_PATH
