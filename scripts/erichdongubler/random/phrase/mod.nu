@@ -1,4 +1,6 @@
 export def "main" [] {
+  use std-rfc/random
+
   const MODIFIERS = path self ./modifiers.lst
   let modifiers = open $MODIFIERS | lines
 
@@ -8,7 +10,5 @@ export def "main" [] {
   const NOUNS = path self ./nouns.lst
   let nouns = open $NOUNS | lines
 
-  [$modifiers $adjectives $nouns] | each {|words|
-    $words | get (random int 0..($words | length))
-  }
+  [$modifiers $adjectives $nouns] | each { random choice | first }
 }
