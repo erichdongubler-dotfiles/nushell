@@ -148,6 +148,17 @@ export def "reversi" [] {
   jj describe '@-' --message ''
 }
 
+# Rebases the specified revisions to be parents `@` and children of the first immutable commits in
+# `@`'s lineage.
+export def "restring" [
+  --revisions(-r): oneof<string, nothing> = null,
+  --before(-B): oneof<string, nothing> = null,
+] {
+  let before = $before | default '@'
+  let after = $"roots\(immutable\(\)..\(($before)\)\)-"
+  jj rebase --revisions $revisions --before $before --after $after
+}
+
 export def "util gen-completions nushell" [] {
   jj util completion nushell o> $'($nu.default-config-dir)/autoload/jj-completion.nu'
 }
