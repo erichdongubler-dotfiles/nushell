@@ -1,3 +1,21 @@
+export def "disks list" [] {
+	match $nu.os-info.name {
+		"macos" => {
+			diskutil list
+				| split row "\n\n"
+				| parse --regex '^(?P<path>/dev/\S+) \((?P<types>[^\)]+?)\):\n(?P<partitions>.*)'
+				| update types { split row ', ' }
+				| update partitions { from ssv  }
+			# TODO: `partitions` parsing is busted
+		}
+		_ => {
+			error make {
+				msg: (["unable to determine how to list disks; unrecognized platform " ($nu.os-info | debug)] | str join)
+			}
+		}
+	}
+}
+
 export def suspend [] {
 	match $nu.os-info.name {
 		"windows" => {
