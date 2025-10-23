@@ -28,9 +28,11 @@ let init_jobs = [
 		gen-completions-starship
 	}
 ]
-$init_jobs | par-each --threads ($init_jobs | length) {
-  do $in | default {}
-} | reduce --fold {} {|env, acc| $acc | merge $env } | reject PWD | load-env
+$init_jobs
+  | par-each --threads ($init_jobs | length) { do $in }
+  | reduce --fold {} {|env, acc| $acc | merge $env }
+  | reject PWD
+  | load-env
 
 export const SCRIPTS_DIR = ($nu.config-path | path dirname | path join scripts)
 # NOTE: No need to `mkdir` or `touch …/mod.nu` here, since this should be created by my dotfiles
