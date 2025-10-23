@@ -1,6 +1,6 @@
 $env.EDITOR = "nvim"
 
-export const ENV_DIR = ($nu.env-path | path dirname | path join env)
+export const ENV_DIR = path self './env/mod.nu'
 
 use $ENV_DIR os init-os-env
 init-os-env | load-env
