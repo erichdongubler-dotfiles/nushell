@@ -31,7 +31,7 @@ let init_jobs = [
 $init_jobs
   | par-each --threads ($init_jobs | length) { do $in }
   | reduce --fold {} {|env, acc| $acc | merge $env }
-  | reject PWD
+  | reject --optional PWD
   | load-env
 
 export const SCRIPTS_DIR = ($nu.config-path | path dirname | path join scripts)
