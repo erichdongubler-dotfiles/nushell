@@ -8,7 +8,16 @@ export def "advance" [
 
 export def --wrapped "blame-stack" [
   --fileset: string,
-  --fileset-pattern: oneof<nothing, string>@"nu-complete blame-stack fileset pattern" = null,
+  --fileset-pattern: oneof<nothing, string>@[
+    "cwd"
+    "file"
+    "cwd-file"
+    "glob"
+    "cwd-glob"
+    "root"
+    "root-file"
+    "root-glob"
+  ] = null,
   --revisions (-r): string = 'immutable()..@',
   --template (-T): string = 'erichdongubler_preferred()',
   ...args
