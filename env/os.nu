@@ -15,6 +15,9 @@ export def init-os-env [] {
 		}
 		"linux" => {
 			with-env { PATH: $env.PATH } {
+				if (uname).nodename == "bazzite" {
+					std path add --append '/home/linuxbrew/.linuxbrew/bin/'
+				}
 				std path add --append '~/.local/bin'
 				std path add --append '~/.cargo/bin'
 				std path add --append '~/.volta/bin'
