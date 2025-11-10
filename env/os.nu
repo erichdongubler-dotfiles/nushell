@@ -15,7 +15,9 @@ export def init-os-env [] {
 		}
 		"linux" => {
 			with-env { PATH: $env.PATH } {
+				std path add --append '~/.local/bin'
 				std path add --append '~/.cargo/bin'
+				std path add --append '~/.volta/bin'
 				{
 					PATH: $env.PATH
 				}
