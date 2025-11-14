@@ -25,6 +25,7 @@ export def init-os-env [] {
 		}
 		"android" => {
 			with-env { PATH: $env.PATH } {
+				std path add --append '~/.local/bin'
 				std path add --append '~/.cargo/bin/'
 				{
 					PATH: $env.PATH
