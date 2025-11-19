@@ -95,6 +95,18 @@ export def "gh pr push" [
   run-external $bin ...$args
 }
 
+export def "hoist" [
+  --revisions(-r): string,
+  --before(-B): string = "@",
+] {
+  if $revisions == null {
+    error make --unspanned {
+      msg: "no `--revisions` specified"
+    }
+  }
+  jj rebase --revisions $revisions --before $"roots\(immutable\(\)..\(($before)\)\)"
+}
+
 # NOTE: This is `export`ed for the sake of `CTRL + G` completion.
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
