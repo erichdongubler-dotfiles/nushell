@@ -6,6 +6,9 @@ export def suspend [] {
 		"macos" => {
 			osascript -e 'tell app "System Events" to sleep'
 		}
+		"linux" => {
+			systemctl suspend
+		}
 		_ => {
 			error make --unspanned {
 				msg: (["unable to determine how to sleep; unrecognized platform " ($nu.os-info | debug)] | str join)
