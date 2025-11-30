@@ -34,7 +34,7 @@ export def "copy-missing" [
     | get name
 
   for file in $files {
-    let target_path = $'F:/($file)'
+    let target_path = $resolved.remote | path join $file
     mkdir --verbose ($target_path | path dirname)
     cp --verbose $file $'F:/($target_path)'
   }
