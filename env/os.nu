@@ -15,10 +15,19 @@ export def init-os-env [] {
 		}
 		"linux" => {
 			with-env { PATH: $env.PATH } {
-				std path add --append '/home/linuxbrew/.linuxbrew/bin/'
-				std path add --append '~/.local/bin'
-				std path add --append '~/.cargo/bin'
-				std path add --append '~/.volta/bin'
+				# NOTE: Bazzite is an immutable distribution, so we should assume that a conflict
+				# between system and user binaries should use user binaries first.
+				let add = if (uname).nodename == "bazzite" {
+					{|dirs| std path add ...$dirs }
+				} else {
+					{|dirs| std path add --append ...$dirs }
+				}
+				do --env $add [
+					'/home/linuxbrew/.linuxbrew/bin/'
+					'~/.local/bin'
+					'~/.cargo/bin'
+					'~/.volta/bin'
+				]
 				{
 					PATH: $env.PATH
 				}
