@@ -36,6 +36,53 @@ export def --wrapped "blame-stack" [
   jj ...$args
 }
 
+# Clone `upstream` and add `origin` as another repo, with the latter being treated as a fork.
+export def --wrapped "git clone-contrib" [
+  --upstream: oneof<string, nothing> = null,
+  --origin: oneof<string, nothing> = null,
+  # --fork: oneof<string, nothing> = null, # TODO: create fork on popular platforms :D
+  destination: oneof<path, nothing> = null,
+  ...clone_args,
+] {
+  use std/log
+
+  let upstream = $upstream | default {
+    error make --unspanned {
+      msg: "no `--upstream` provided"
+    }
+  }
+
+  let origin = $origin | default {
+    error make --unspanned {
+      msg: "no `--origin` provided"
+    }
+  }
+
+  let destination = $destination | default {
+    let last_path_segment = $upstream
+      | url parse
+      | get path
+      | split row '/'
+      | reject 0
+      | last
+      | str replace --regex '.git$' ''
+
+    log debug $"inferred repo name to be `($last_path_segment)`"
+
+    $last_path_segment
+  }
+
+  jj git clone --remote upstream $upstream $destination ...$clone_args
+
+  cd $destination
+
+  jj git remote add origin $origin
+
+  jj config set --repo 'git.fetch' '["upstream", "origin"]'
+
+  jj git fetch
+}
+
 export def "bookmark resolve" [
 ] {
   let template = '
