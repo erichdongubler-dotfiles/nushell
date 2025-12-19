@@ -7,7 +7,7 @@ export def "advance" [
 }
 
 export def --wrapped "blame-stack" [
-  --fileset: string,
+  --fileset: path,
   --fileset-pattern: oneof<nothing, string>@[
     "cwd"
     "file"
