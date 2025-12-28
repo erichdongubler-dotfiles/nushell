@@ -282,6 +282,7 @@ $env.config.keybindings = [
   }
 ]
 
+use $SCRIPTS_DIR erichdongubler gh
 use $SCRIPTS_DIR erichdongubler jj
 use $SCRIPTS_DIR erichdongubler lr
 use std/clip

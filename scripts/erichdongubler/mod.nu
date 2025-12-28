@@ -1,4 +1,5 @@
 export module find-up.nu
+export module gh.nu
 export module jj.nu
 export module os.nu
 export module random
