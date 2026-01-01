@@ -1,5 +1,7 @@
 use std/log
 
+use (path self './gh.nu') GH_OWNER_AND_REPO_RE
+
 export def "advance" [
   bookmark: string@"nu-complete jj bookmark list"
 ] {
@@ -47,6 +49,11 @@ export def --wrapped "git clone-contrib" [
   use std/log
 
   let upstream = $upstream
+    | each {|upstream|
+      if ($upstream =~ $'^($GH_OWNER_AND_REPO_RE)$') {
+        return $'https://github.com/($upstream)'
+      }
+    }
     | default {
       error make --unspanned {
         msg: "no `--upstream` provided"
@@ -54,6 +61,11 @@ export def --wrapped "git clone-contrib" [
     }
 
   let origin = $origin
+    | each {|origin|
+      if ($origin =~ $GH_OWNER_AND_REPO_RE) {
+        return $'git@github.com:($origin)'
+      }
+    }
     | default {
       error make --unspanned {
         msg: "no `--origin` provided"
