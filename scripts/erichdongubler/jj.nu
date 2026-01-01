@@ -99,6 +99,16 @@ export def --wrapped "git clone-contrib" [
 
   jj config set --repo 'git.fetch' '["upstream", "origin"]'
 
+  let bookmarks_at_trunk = (
+    jj bookmark list --revisions 'trunk()' --template 'name ++ "\n"'
+  ) | lines
+  if ($bookmarks_at_trunk | length) == 1 {
+    let trunk_bookmark_name = $bookmarks_at_trunk | first
+    jj bookmark track $'($trunk_bookmark_name)@origin'
+  } else {
+    log warning "unable to determine which `origin` mainline bookmark to track"
+  }
+
   jj git fetch
 }
 
