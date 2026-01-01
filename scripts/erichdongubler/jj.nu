@@ -46,17 +46,19 @@ export def --wrapped "git clone-contrib" [
 ] {
   use std/log
 
-  let upstream = $upstream | default {
-    error make --unspanned {
-      msg: "no `--upstream` provided"
+  let upstream = $upstream
+    | default {
+      error make --unspanned {
+        msg: "no `--upstream` provided"
+      }
     }
-  }
 
-  let origin = $origin | default {
-    error make --unspanned {
-      msg: "no `--origin` provided"
+  let origin = $origin
+    | default {
+      error make --unspanned {
+        msg: "no `--origin` provided"
+      }
     }
-  }
 
   let destination = $destination | default {
     let last_path_segment = $upstream
