@@ -1,6 +1,6 @@
 use std/log
 
-use (path self './gh.nu') GH_OWNER_AND_REPO_RE
+use (path self './gh.nu') [GH_IDENT_RE, GH_OWNER_AND_REPO_RE]
 
 export def "advance" [
   bookmark: string@"nu-complete jj bookmark list"
@@ -60,8 +60,25 @@ export def --wrapped "git clone-contrib" [
       }
     }
 
+  let last_upstream_path_segment = $upstream
+    | url parse
+    | get path
+    | split row '/'
+    | reject 0
+    | last
+    | str replace --regex '.git$' ''
+
+  log debug $"inferred repo name to be `($last_upstream_path_segment)`"
+
+  let matches_single_gh_ident = {
+    $in =~ $'^($GH_IDENT_RE)$'
+  }
+
   let origin = $origin
     | each {|origin|
+      if ($origin | do $matches_single_gh_ident) {
+        return $'git@github.com:($origin)/($last_upstream_path_segment)'
+      }
       if ($origin =~ $GH_OWNER_AND_REPO_RE) {
         return $'git@github.com:($origin)'
       }
@@ -72,19 +89,7 @@ export def --wrapped "git clone-contrib" [
       }
     }
 
-  let destination = $destination | default {
-    let last_path_segment = $upstream
-      | url parse
-      | get path
-      | split row '/'
-      | reject 0
-      | last
-      | str replace --regex '.git$' ''
-
-    log debug $"inferred repo name to be `($last_path_segment)`"
-
-    $last_path_segment
-  }
+  let destination = $destination | default $last_upstream_path_segment
 
   jj git clone --remote upstream $upstream $destination ...$clone_args
 
