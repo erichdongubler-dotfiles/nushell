@@ -1,3 +1,4 @@
+export module cargo.nu
 export module find-up.nu
 export module gh.nu
 export module jj.nu
