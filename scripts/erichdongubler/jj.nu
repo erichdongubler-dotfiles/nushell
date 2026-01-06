@@ -179,7 +179,8 @@ export def "fixup" [
 
 # Run `gh pr view …` and `git fetch …` to create a branch locally for `pr_ish`.
 export def "gh pr checkout" [
-  pr_ish: string,
+  # TODO: check this
+  pr_ish: oneof<string, nothing> = null,
   --repo: oneof<string, nothing> = null,
   --force, # Whether the local copy of the PR's branch should be overwritten.
 ] {
@@ -231,7 +232,8 @@ export def "gh pr checkout" [
 }
 
 export def "gh pr push" [
-  pr_ish: string,
+  # TODO: check this
+  pr_ish: oneof<string, nothing> = null,
   --repo: oneof<string, nothing> = null,
 ] {
   use std/log [] # set up `log` cmd. state
