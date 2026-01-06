@@ -156,7 +156,7 @@ export def "fixup" [
 
 export def "gh pr push" [
   pr_ish: string,
-  --repo: string,
+  --repo: oneof<string, nothing> = null,
 ] {
   use std/log [] # set up `log` cmd. state
 
