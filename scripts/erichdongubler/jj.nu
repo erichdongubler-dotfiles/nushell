@@ -84,32 +84,32 @@ export def --wrapped "git clone-contrib" [
       }
     }
     | default {
-      error make --unspanned {
-        msg: "no `--origin` provided"
-      }
+      log info "no `--origin` provided; cloning with only an `upstream` remote…"
     }
 
   let destination = $destination | default $last_upstream_path_segment
 
   jj git clone --remote upstream $upstream $destination ...$clone_args
 
-  cd $destination
+  if $origin != null {
+    cd $destination
 
-  jj git remote add origin $origin
+    jj git remote add origin $origin
 
-  jj config set --repo 'git.fetch' '["upstream", "origin"]'
+    jj config set --repo 'git.fetch' '["upstream", "origin"]'
 
-  let bookmarks_at_trunk = (
-    jj bookmark list --revisions 'trunk()' --template 'name ++ "\n"'
-  ) | lines
-  if ($bookmarks_at_trunk | length) == 1 {
-    let trunk_bookmark_name = $bookmarks_at_trunk | first
-    jj bookmark track $'($trunk_bookmark_name)@origin'
-  } else {
-    log warning "unable to determine which `origin` mainline bookmark to track"
+    let bookmarks_at_trunk = (
+      jj bookmark list --revisions 'trunk()' --template 'name ++ "\n"'
+    ) | lines
+    if ($bookmarks_at_trunk | length) == 1 {
+      let trunk_bookmark_name = $bookmarks_at_trunk | first
+      jj bookmark track $'($trunk_bookmark_name)@origin'
+    } else {
+      log warning "unable to determine which `origin` mainline bookmark to track"
+    }
+
+    jj git fetch
   }
-
-  jj git fetch
 }
 
 export def "bookmark resolve" [
