@@ -2,6 +2,8 @@ use std/log
 
 use (path self './gh.nu') [GH_IDENT_RE, GH_OWNER_AND_REPO_RE]
 
+const EFFECTIVE_WC_REVSET = "heads(@- | present(@ ~ empty()))"
+
 export def "advance" [
   bookmark: string@"nu-complete jj bookmark list"
 ] {
@@ -212,6 +214,16 @@ def "nu-complete blame-stack fileset pattern" [] {
 # NOTE: This is `export`ed for the sake of `CTRL + G` completion.
 export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
+}
+
+export def "promote" [
+  --revisions(-r): string = (["immutable()..(" $EFFECTIVE_WC_REVSET ")"] | str join),
+] {
+  let straggler_revset = ([
+    "roots(reachable(" $revisions ", mutable()) ~ (immutable()..(" $revisions ")))"
+  ] | str join)
+
+  jj rebase --source $straggler_revset --after $"heads\(($revisions)\)"
 }
 
 # Creates a new revert of either `@` (if not empty) or `@-`.
