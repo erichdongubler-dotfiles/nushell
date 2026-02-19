@@ -356,6 +356,16 @@ export def "peel" [
   restring --revisions $revision --before $before
 }
 
+export def "promote" [
+  --revisions(-r): string = (["immutable()..(" $EFFECTIVE_WC_REVSET ")"] | str join),
+] {
+  let straggler_revset = ([
+    "roots(reachable(" $revisions ", mutable()) ~ (immutable()..(" $revisions ")))"
+  ] | str join)
+
+  jj rebase --source $straggler_revset --after $"heads\(($revisions)\)"
+}
+
 # Creates a new revert of either `@` (if not empty) or `@-`.
 export def "reversi" [] {
   if not (wc-is-empty) {
