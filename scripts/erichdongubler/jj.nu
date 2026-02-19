@@ -2,6 +2,8 @@ use std/log
 
 use (path self './gh.nu') [GH_IDENT_RE, GH_OWNER_AND_REPO_RE]
 
+const EFFECTIVE_WC_REVSET = "heads(@- | present(@ ~ empty()))"
+
 export def "advance" [
   bookmark: string@"nu-complete jj bookmark list"
 ] {
