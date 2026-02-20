@@ -130,14 +130,6 @@ export def "bookmark resolve" [
   }
 }
 
-def "effective-wc" []: nothing -> string {
-  if (wc-is-empty) {
-    '@-'
-  } else {
-    '@'
-  }
-}
-
 export def "fixup" [
   --revisions (-r): string = "@-",
 ] {
@@ -252,13 +244,12 @@ def "wc-is-empty" []: nothing -> bool {
 
 # Push a new (randomized) bookmark for the single provided revision.
 export def "yeet" [
-  --revisions (-r): oneof<string, nothing> = null,
+  --revisions (-r): string = $EFFECTIVE_WC_REVSET,
   # The revision to push.
   #
   # The name is plural to be consistent with other CLIs.
 ] {
   use erichdongubler/random
-  let revisions = $revisions | default { effective-wc }
   let name = $"erichdongubler-push-(random phrase | str join '-')"
   jj git push --named $"($name)=($revisions)"
 }
