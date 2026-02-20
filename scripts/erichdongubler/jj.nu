@@ -252,6 +252,19 @@ export def "yeet" [
   yeet push --revisions $revisions
 }
 
+# Push all unsync'd work with random branch names.
+#
+# A convenience wrapper for `yeet` that attempts to push all unsynchronized work found via the
+# following revset:
+#
+# ```
+# mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))
+# ```
+export def "yeet all" [
+] {
+  yeet push --revisions 'mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))'
+}
+
 def "yeet push" [
   --revisions: oneof<string, nothing> = null,
 ] {
