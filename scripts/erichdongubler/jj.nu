@@ -250,8 +250,12 @@ def "wc-is-empty" []: nothing -> bool {
   jj log --no-graph --revisions '@' --template "self.empty()" | into bool
 }
 
+# Push a new (randomized) bookmark for the single provided revision.
 export def "yeet" [
   --revisions (-r): oneof<string, nothing> = null,
+  # The revision to push.
+  #
+  # The name is plural to be consistent with other CLIs.
 ] {
   use erichdongubler/random
   let revisions = $revisions | default { effective-wc }
