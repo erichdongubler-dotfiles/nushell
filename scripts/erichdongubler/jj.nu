@@ -124,7 +124,7 @@ export def "bookmark resolve" [
     )
   '
   let bookmarks_with_single_visible_added_target = (
-    jj bookmark list --conflicted --template $template
+    jj bookmark list --conflicted --quiet --template $template
       | parse '{bookmark} {commit}'
   )
   for entry in $bookmarks_with_single_visible_added_target {
