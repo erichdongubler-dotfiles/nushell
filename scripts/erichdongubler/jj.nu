@@ -342,8 +342,14 @@ export def "yeet" [
   # Revision(s) to push.
   #
   # The name is plural to be consistent with other CLIs.
+  --allow-empty-description,
+  # Forwards to `jj git push …`.
 ] {
-  yeet push --revisions $revisions
+  (
+    yeet push
+      --revisions $revisions
+      --allow-empty-description=$allow_empty_description
+  )
 }
 
 # Push all unsync'd work with random branch names.
@@ -355,12 +361,20 @@ export def "yeet" [
 # mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))
 # ```
 export def "yeet all" [
+  --allow-empty-description,
+  # Forwards to `jj git push …`.
 ] {
-  yeet push --revisions 'mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))'
+  (
+    yeet push
+      --revisions 'mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))'
+      --allow-empty-description=$allow_empty_description
+  )
 }
 
 def "yeet push" [
   --revisions: oneof<string, nothing> = null,
+  --allow-empty-description,
+  # Forwards to `jj git push …`.
 ] {
   use erichdongubler/random
   (
@@ -376,6 +390,11 @@ def "yeet push" [
         '--named'
         $"($name)=($change_id)"
       ]
+    }
+    | if $allow_empty_description {
+      $in | prepend ['--allow-empty-description']
+    } else {
+      $in
     }
     | jj git push ...$in
 }
