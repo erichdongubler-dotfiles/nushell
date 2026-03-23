@@ -2,6 +2,7 @@ export def init-os-env [] {
 	use std
 
 	{
+		SHELL: $nu.current-exe
 	} | merge (match $nu.os-info.name {
 		"macos" => {
 			with-env { PATH: $env.PATH } {
