@@ -274,6 +274,34 @@ $env.config.keybindings = [
     }
   }
   {
+    name: zellij-workspace-refs
+    modifier: "alt"
+    keycode: char_z
+    mode: [emacs, vi_insert]
+    event: {
+      send: ExecuteHostCommand
+      cmd: "
+        commandline edit --insert (
+          zellij list-sessions --no-formatting
+            | parse --regex ([
+              '^(?P<name>.*) '
+              '\\[Created (?P<created_datetime>.+?) ago\\]'
+              '(?P<ready_to_resurrect> \\(EXITED - attach to resurrect\\))?'
+            ] | str join)
+            | update ready_to_resurrect { $in | is-not-empty }
+            | each { $in.name }
+            | str join (char -i 0)
+            | fzf
+              --scheme=path
+              --read0
+              --layout=reverse
+              --height=40%
+              --bind=change:top
+            | decode utf-8
+        )"
+    }
+  }
+  {
     name: ctrl_w_deleteword
     modifier: control
     keycode: char_w
