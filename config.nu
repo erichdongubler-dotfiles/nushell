@@ -143,6 +143,19 @@ $env.config.keybindings = [
     }
   }
   {
+    name: ide_completion_menu
+    modifier: alt
+    keycode: space
+    mode: [emacs vi_normal vi_insert]
+    event: {
+      until: [
+        { send: menu name: ide_completion_menu }
+        { send: menunext }
+        { edit: complete }
+      ]
+    }
+  }
+  {
     name: history_menu
     modifier: control
     keycode: char_r
