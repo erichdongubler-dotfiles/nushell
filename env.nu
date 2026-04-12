@@ -30,7 +30,7 @@ let init_jobs = [
 ]
 $init_jobs
   | par-each --threads ($init_jobs | length) { do $in }
-  | reduce --fold {} {|env, acc| $acc | merge $env }
+  | reduce --fold {} {|env_vars, acc| $acc | merge $env_vars }
   | reject --optional PWD
   | load-env
 
