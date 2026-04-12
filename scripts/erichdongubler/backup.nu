@@ -28,15 +28,24 @@ export def "copy-missing" [
     | impl diff shallow
     | lines
     | where (($it | str starts-with '-') and (not ($it | str starts-with '---')))
-    | str replace --regex '^-' ''
+    | each {
+      str replace --regex '^-' ''
+      | if ($in | is-empty) {
+        null
+      } else {
+        $in
+      }
+    }
     | ls ...$in
     | where $it.type == file
     | get name
 
   for file in $files {
+    # TODO: change direction based on `--to`
+    let source_path = $resolved.local | path join $file
     let target_path = $resolved.remote | path join $file
-    mkdir --verbose ($target_path | path dirname)
-    cp --verbose $file $'F:/($target_path)'
+    print ([mkdir --verbose ($target_path | path dirname)] | to nuon)
+    print ([cp --verbose $source_path $target_path] | to nuon)
   }
 }
 
