@@ -27,7 +27,13 @@ export def init-os-env [] {
 		_ => []
 	}
 
-	let env_vars = with-env { PATH: $env.PATH } { do $add $paths }
+	let env_vars = with-env { PATH: $env.PATH } {
+		if ($paths | is-not-empty) {
+			do $add $paths
+		} else {
+			$env.PATH
+		}
+	}
 
 	{
 		SHELL: $nu.current-exe
