@@ -1,12 +1,6 @@
 export def init-os-env [] {
 	use std
 
-	let add = if (uname).nodename == "bazzite" {
-		{|dirs| std path add --ret ...$dirs }
-	} else {
-		{|dirs| std path add --ret --append ...$dirs }
-	}
-
 	let paths = match $nu.os-info.name {
 		"macos" => [
 			'/opt/homebrew/bin'
@@ -34,7 +28,7 @@ export def init-os-env [] {
 
 	let env_vars = with-env { PATH: $env.PATH } {
 		if ($paths | is-not-empty) {
-			do $add $paths
+			std path add --ret ...$paths
 		} else {
 			$env.PATH
 		}
