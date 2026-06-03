@@ -27,6 +27,7 @@ export def init-os-env [] {
 		"windows" => [
 			'~/.local/bin'
 			'~/.cargo/bin/'
+			'~/.volta/bin'
 		]
 		_ => []
 	}
