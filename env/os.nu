@@ -24,6 +24,8 @@ export def init-os-env [] {
 			'~/.local/bin'
 			'~/.cargo/bin/'
 		]
+		"windows" => [
+		]
 		_ => []
 	}
 
