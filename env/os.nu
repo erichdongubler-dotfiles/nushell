@@ -27,6 +27,7 @@ export def init-os-env [] {
 			'~/.cargo/bin'
 			'~/.volta/bin'
 			'~/.local/share/pnpm/bin'
+			'~/workspace/mozilla/depot_tools'
 		]
 		_ => []
 	}
@@ -42,6 +43,7 @@ export def init-os-env [] {
 	{
 		SHELL: $nu.current-exe
 		MOZ_AVOID_JJ_VCS: 0
+		DEPOT_TOOLS_WIN_TOOLCHAIN: 0
 		PATH: $env_vars
 	}
 }
