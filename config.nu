@@ -280,6 +280,13 @@ $env.config.keybindings = [
     mode: [emacs, vi_insert]
     event: { edit: backspaceword }
   }
+  {
+    name: alt_w_deleteword
+    modifier: alt
+    keycode: char_w
+    mode: [emacs, vi_insert]
+    event: { edit: backspaceword }
+  }
 ]
 
 use $SCRIPTS_DIR erichdongubler gh
