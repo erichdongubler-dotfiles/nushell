@@ -105,7 +105,7 @@ export def --wrapped "git clone-contrib" [
     ) | lines
     if ($bookmarks_at_trunk | length) == 1 {
       let trunk_bookmark_name = $bookmarks_at_trunk | first
-      jj bookmark track $'($trunk_bookmark_name)@origin'
+      jj bookmark track --remote origin $trunk_bookmark_name
     } else {
       log warning "unable to determine which `origin` mainline bookmark to track"
     }
