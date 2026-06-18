@@ -23,7 +23,7 @@ export def --wrapped "blame-stack" [
     "root-glob"
   ] = null,
   --revisions (-r): string = 'immutable()..@',
-  --template (-T): string = 'erichdongubler_preferred()',
+  --template (-T): string = 'erichdongubler_log_compact',
   ...args
 ] {
   use std/log [] # set up `log` cmd. state
