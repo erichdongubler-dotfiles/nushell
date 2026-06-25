@@ -1,5 +1,9 @@
 export const GH_IDENT_RE = '[-_a-zA-Z0-9]+'
 
+export const GH_OWNER_RE = ([
+'(?P<owner>' $GH_IDENT_RE ')'
+] | str join)
+
 export const GH_OWNER_AND_REPO_RE = ([
 '(?P<owner>' $GH_IDENT_RE ')'
 '/'
