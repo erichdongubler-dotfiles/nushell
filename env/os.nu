@@ -22,11 +22,11 @@ export def init-os-env [] {
 		]
 		"android" => [
 			'~/.local/bin'
-			'~/.cargo/bin/'
+			'~/.cargo/bin'
 		]
 		"windows" => [
 			'~/.local/bin'
-			'~/.cargo/bin/'
+			'~/.cargo/bin'
 			'~/.volta/bin'
 		]
 		_ => []
