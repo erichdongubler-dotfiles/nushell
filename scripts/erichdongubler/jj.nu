@@ -41,6 +41,10 @@ export def --wrapped "blame-stack" [
 }
 
 # Clone `upstream` and add `origin` as another repo, with the latter being treated as a fork.
+#
+# - `--upstream` must be of the format `<owner>/<repo>`.
+# - `--origin` must be of the format `<owner>[/<repo>]`. If `repo` is omitted, then the same `repo`
+#   name from `--upstream` is assumed.
 export def --wrapped "git clone-contrib" [
   --upstream: oneof<string, nothing> = null,
   --origin: oneof<string, nothing> = null,
@@ -54,6 +58,11 @@ export def --wrapped "git clone-contrib" [
     | each {|upstream|
       if ($upstream =~ $'^($GH_OWNER_AND_REPO_RE)$') {
         return $'https://github.com/($upstream)'
+      } else {
+        error make {
+          msg: "`--upstream` should be of the format `<owner>/<repo>`"
+          span: (metadata $upstream).span
+        }
       }
     }
     | default {
@@ -83,6 +92,13 @@ export def --wrapped "git clone-contrib" [
       }
       if ($origin =~ $GH_OWNER_AND_REPO_RE) {
         return $'git@github.com:($origin)'
+      } else {
+        error make {
+          msg: "`--upstream` should be of the format `<owner>[/<repo>]`"
+          label: {
+            span: (metadata $origin).span
+          }
+        }
       }
     }
     | default {
