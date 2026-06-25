@@ -10,5 +10,5 @@ export def "main" [] {
   const NOUNS = path self ./nouns.lst
   let nouns = open $NOUNS | lines
 
-  [$modifiers $adjectives $nouns] | each { random choice | first }
+  [$modifiers $adjectives $nouns] | each { random choice }
 }
