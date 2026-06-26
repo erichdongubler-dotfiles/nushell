@@ -1,6 +1,6 @@
 use std/log
 
-use (path self './gh.nu') [GH_IDENT_RE, GH_OWNER_AND_REPO_RE]
+use (path self './gh.nu') [GH_IDENT_RE, GH_OWNER_RE, GH_OWNER_AND_REPO_RE]
 
 const EFFECTIVE_WC_REVSET = "heads(@- | present(@ ~ empty()))"
 
@@ -48,7 +48,7 @@ export def --wrapped "blame-stack" [
 export def --wrapped "git clone-contrib" [
   --upstream: oneof<string, nothing> = null,
   --origin: oneof<string, nothing> = null,
-  # --fork: oneof<string, nothing> = null, # TODO: create fork on popular platforms :D
+  # --create-fork: oneof<string, nothing> = null, # TODO: create fork on popular platforms :D
   destination: oneof<path, nothing> = null,
   ...clone_args,
 ] {
@@ -57,6 +57,8 @@ export def --wrapped "git clone-contrib" [
   let upstream = $upstream
     | each {|upstream|
       if ($upstream =~ $'^($GH_OWNER_AND_REPO_RE)$') {
+        return $'https://github.com/($upstream)'
+      } else if ($upstream =~ $'^($GH_OWNER_RE)$') {
         return $'https://github.com/($upstream)'
       } else {
         error make {
@@ -87,10 +89,9 @@ export def --wrapped "git clone-contrib" [
 
   let origin = $origin
     | each {|origin|
-      if ($origin | do $matches_single_gh_ident) {
+      if ($origin =~ $GH_OWNER_RE) {
         return $'git@github.com:($origin)/($last_upstream_path_segment)'
-      }
-      if ($origin =~ $GH_OWNER_AND_REPO_RE) {
+      } else if ($origin =~ $GH_OWNER_AND_REPO_RE) {
         return $'git@github.com:($origin)'
       } else {
         error make {
