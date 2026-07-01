@@ -15,7 +15,7 @@ export def init-os-env [] {
 			'~/.volta/bin'
 		]
 		"linux" => [
-			'/home/linuxbrew/.linuxbrew/bin/'
+			'/home/linuxbrew/.linuxbrew/bin'
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
