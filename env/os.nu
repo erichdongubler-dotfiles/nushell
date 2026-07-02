@@ -17,6 +17,7 @@ export def init-os-env [] {
 		"android" => [
 			'~/.local/bin'
 			'~/.cargo/bin'
+			'~/.volta/bin'
 		]
 		"windows" => [
 			'~/.local/bin'
