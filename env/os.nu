@@ -20,6 +20,7 @@ export def init-os-env [] {
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
+			'~/.local/share/pnpm/bin'
 		]
 		"windows" => [
 			'~/.local/bin'
