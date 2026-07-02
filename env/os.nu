@@ -3,16 +3,16 @@ export def init-os-env [] {
 
 	let paths = match $nu.os-info.name {
 		"macos" => [
-			'/opt/homebrew/bin'
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
+			'/opt/homebrew/bin'
 		]
 		"linux" => [
-			'/home/linuxbrew/.linuxbrew/bin'
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
+			'/home/linuxbrew/.linuxbrew/bin'
 		]
 		"android" => [
 			'~/.local/bin'
