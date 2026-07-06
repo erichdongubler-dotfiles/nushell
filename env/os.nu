@@ -6,6 +6,7 @@ export def init-os-env [] {
 			'~/.local/bin'
 			'~/.cargo/bin'
 			'~/.volta/bin'
+			'~/.rvm/bin'
 			'/opt/homebrew/bin'
 		]
 		"linux" => [
