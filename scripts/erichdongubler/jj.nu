@@ -166,6 +166,59 @@ export def "fixup" [
   }
 }
 
+# Run `gh pr view …` and `git fetch …` to create a branch locally for `pr_ish`.
+export def "gh pr checkout" [
+  pr_ish: string,
+  --repo: oneof<string, nothing> = null,
+  --force, # Whether the local copy of the PR's branch should be overwritten.
+] {
+  use std/log [] # set up `log` cmd. state
+
+  mut args = []
+  if $repo != null {
+    $args = $args | append [--repo $repo]
+  }
+
+  load-env {
+    GIT_DIR: (jj git root)
+  }
+
+  let pr_view = (
+    gh pr view
+      --json headRepositoryOwner,headRepository,headRefName,headRefOid
+      $pr_ish
+      ...$args
+  )
+  if $env.LAST_EXIT_CODE != 0 {
+    error make --unspanned {
+      msg: "failed to fetch pull request metadata; maybe the ref. or auth. are incorrect?"
+    }
+  }
+  let pr_view = $pr_view | from json
+
+  let branch_name = $pr_view.headRefName
+  let head_commit = $pr_view.headRefOid
+  let repo = $pr_view.headRepository.name
+  let owner = $pr_view.headRepositoryOwner.login
+
+  load-env {
+    GIT_WORK_TREE: (jj workspace root)
+  }
+
+  let bin = 'git'
+  let args = [
+    fetch
+    $'https://github.com/($owner)/($repo).git'
+    $'($branch_name):($branch_name)'
+    ...(if $force { ['--force'] } else { [] })
+  ]
+  log info $"Running `([$bin ...$args] | str join ' ')`"
+  run-external $bin ...$args
+
+  jj git import
+  jj new $head_commit
+}
+
 export def "gh pr push" [
   pr_ish: string,
   --repo: oneof<string, nothing> = null,
