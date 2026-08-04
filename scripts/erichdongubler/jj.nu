@@ -308,6 +308,54 @@ export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
 
+# `jj split` a revision, then `jj restring` it--that is, put it "after" the current change's
+# immutable roots.
+#
+# Particularly useful for breaking a change out into its own.
+export def "peel" [
+  --before(-B): oneof<string, nothing> = null,
+  # Forwarded to `jj restring`.
+  --interactive(-i),
+  # Forwarded to `jj split`.
+  --revision(-r): string = '@',
+  # Forwarded to `jj split`.
+  ...paths: path,
+  # Forwarded to `jj split`.
+] {
+  let revisions = (
+    jj log --revision $revision --template 'change_id ++ "\n"' --no-graph
+  ) | lines
+
+  let revision = match ($revisions | length) {
+    1 => {
+      $revisions | first --strict
+    }
+    $count => {
+      error make {
+        msg: $"expected 1 revision; got revision\(($count)\) instead"
+        labels: [
+          {
+            text: ""
+            span: (metadata $revision).span
+          }
+        ]
+      }
+    }
+  }
+
+  mut options = []
+
+  if $interactive {
+    $options = $options | append ['--interactive']
+  }
+
+  jj split --revision $revision ...$options ...$paths
+
+  # NOTE: The first revision is the one where selected hunks go, which keeps the same change ID we
+  # resolved before.
+  restring --revisions $revision --before $before
+}
+
 # Creates a new revert of either `@` (if not empty) or `@-`.
 export def "reversi" [] {
   if not (wc-is-empty) {
@@ -320,12 +368,13 @@ export def "reversi" [] {
 # Rebases the specified revisions to be parents `@` and children of the first immutable commits in
 # `@`'s lineage.
 export def "restring" [
+  # TODO: make singular
   --revisions(-r): oneof<string, nothing> = null,
   --before(-B): oneof<string, nothing> = null,
 ] {
   let before = $before | default '@'
   let after = $"roots\(immutable\(\)..\(($before)\)\)-"
-  jj rebase --revisions $revisions --before $before --after $after
+  jj rebase --revision $revisions --before $before --after $after
 }
 
 export def "util gen-completions nushell" [] {
