@@ -155,8 +155,15 @@ export def "bookmark resolve" [
 export def "fixup" [
   --revisions (-r): string = "@-",
   # The revisions being "fixed up".
+  --interactive (-i),
+  # Open the hunk editor to select the changes to `commit`.
 ] {
-  jj commit --message (jj fixup-line $revisions)
+  let fixup_line = jj fixup-line $revisions
+  if $interactive {
+    jj commit --interactive --message $fixup_line
+  } else {
+    jj commit --message $fixup_line
+  }
 }
 
 export def "gh pr push" [
