@@ -344,11 +344,14 @@ export def "yeet" [
   # The name is plural to be consistent with other CLIs.
   --allow-empty-description,
   # Forwards to `jj git push …`.
+  --dry-run,
+  # Forwards to `jj git push …`.
 ] {
   (
     yeet push
       --revisions $revisions
       --allow-empty-description=$allow_empty_description
+      --dry-run=$dry_run
   )
 }
 
@@ -363,17 +366,22 @@ export def "yeet" [
 export def "yeet all" [
   --allow-empty-description,
   # Forwards to `jj git push …`.
+  --dry-run,
+  # Forwards to `jj git push …`.
 ] {
   (
     yeet push
       --revisions 'mutable() ~ ancestors(remote_bookmarks()) ~ (working_copies() & empty() & description(exact:""))'
       --allow-empty-description=$allow_empty_description
+      --dry-run=$dry_run
   )
 }
 
 def "yeet push" [
   --revisions: oneof<string, nothing> = null,
   --allow-empty-description,
+  # Forwards to `jj git push …`.
+  --dry-run,
   # Forwards to `jj git push …`.
 ] {
   use erichdongubler/random
@@ -393,6 +401,11 @@ def "yeet push" [
     }
     | if $allow_empty_description {
       $in | prepend ['--allow-empty-description']
+    } else {
+      $in
+    }
+    | if $dry_run {
+      $in | prepend ['--dry-run']
     } else {
       $in
     }
