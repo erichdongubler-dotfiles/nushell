@@ -158,12 +158,15 @@ export def "fixup" [
   --interactive (-i),
   # Open the hunk editor to select the changes to `commit`.
 ] {
-  let fixup_line = jj fixup-line $revisions
+  mut args = []
+
   if $interactive {
-    jj commit --interactive --message $fixup_line
-  } else {
-    jj commit --message $fixup_line
+    $args = $args | append ['--interactive']
   }
+
+  let fixup_line = jj fixup-line $revisions
+
+  jj commit --message $fixup_line ...$args
 }
 
 # Run `gh pr view …` and `git fetch …` to create a branch locally for `pr_ish`.
