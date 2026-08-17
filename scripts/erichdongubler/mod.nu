@@ -1,3 +1,4 @@
+export module completions
 export module find-up.nu
 export module gh.nu
 export module jj.nu
