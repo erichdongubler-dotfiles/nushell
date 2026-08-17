@@ -148,8 +148,13 @@ export def "bookmark resolve" [
   }
 }
 
+# An instrumented `commit` that auto-populates the first line with an autosquash-compatible message.
+#
+# NOTE: Like with most tooling, no effort is made to determine that the fixup commit applies
+# cleanly.
 export def "fixup" [
   --revisions (-r): string = "@-",
+  # The revisions being "fixed up".
 ] {
   jj commit --message (jj fixup-line $revisions)
 }
