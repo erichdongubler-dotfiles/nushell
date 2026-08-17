@@ -157,11 +157,19 @@ export def "fixup" [
   # The revisions being "fixed up".
   --interactive (-i),
   # Open the hunk editor to select the changes to `commit`.
+  --no-edit,
+  # Do not open an editor; just populate the message with `jj fixup-line`.
 ] {
   mut args = []
 
   if $interactive {
     $args = $args | append ['--interactive']
+  }
+
+  if not $no_edit {
+    # NOTE: Normally, `commit` opens an editor by default, but we're providing a `--message`, so we
+    # have to explicitly ask for it.
+    $args = $args | append ['--editor']
   }
 
   let fixup_line = jj fixup-line $revisions
