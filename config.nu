@@ -130,7 +130,7 @@ $env.config.keybindings = [
     event: { send: menuprevious }
   }
   {
-    name: ide_completion_menu
+    name: ide_completion_menu_ctrl_space
     modifier: control
     keycode: space
     mode: [emacs vi_normal vi_insert]
@@ -143,7 +143,7 @@ $env.config.keybindings = [
     }
   }
   {
-    name: history_menu
+    name: history_menu_ctrl_r
     modifier: control
     keycode: char_r
     mode: [emacs, vi_normal, vi_insert]
@@ -169,7 +169,7 @@ $env.config.keybindings = [
     }
   }
   {
-    name: history_menu
+    name: history_menu_ctrl_b
     modifier: control
     keycode: char_b
     mode: [emacs, vi_normal, vi_insert]

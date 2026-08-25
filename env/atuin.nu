@@ -22,7 +22,7 @@ $env.config = (
 	$env.config | upsert keybindings (
 		$env.config.keybindings
 		| append {
-			name: atuin
+			name: atuin_additive
 			modifier: control
 			keycode: char_b
 			mode: [emacs, vi_normal, vi_insert]
