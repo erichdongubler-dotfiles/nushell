@@ -9,12 +9,11 @@ $env.config.completions.external.completer = {|place|
     z | zi | __zoxide_z | __zoxide_zi => {
       $place.command | skip 1 | zoxide query -l ...$in | lines | where { $in != $env.PWD }
     }
-    git => {
+    _ => {
       carapace $place.command.0 nushell ...$place.command
         | from json
         | if ($in | default [] | where value =~ '^-.*ERR$' | is-empty) { $in } else { null }
     }
-    _ => null
   }
 }
 $env.config.cursor_shape.emacs = "underscore"
