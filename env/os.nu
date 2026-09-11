@@ -43,8 +43,10 @@ export def init-os-env [] {
 	}
 
 	{
+		MOZ_ENABLE_WAYLAND: 1
 		MOZ_SKIP_PATH_PERFORMANCE_CHECK: 1
 		SHELL: $nu.current-exe
 		PATH: $env_vars
+		WAYLAND_DISPLAY: "wayland-0"
 	}
 }
