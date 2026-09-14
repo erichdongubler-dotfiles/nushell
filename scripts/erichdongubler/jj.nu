@@ -139,11 +139,11 @@ export def "bookmark resolve" [
       self.added_targets().filter(|t| !t.hidden()).map(|t| separate(" ", self.name(), t.commit_id().short()) ++ "\n")
     )
   '
-  let bookmarks_with_single_visible_added_target = (
+  let conflicted_bookmarks_with_single_visible_added_target = (
     jj bookmark list --conflicted --quiet --template $template
       | parse '{bookmark} {commit}'
   )
-  for entry in $bookmarks_with_single_visible_added_target {
+  for entry in $conflicted_bookmarks_with_single_visible_added_target {
     jj bookmark set $entry.bookmark --revision $entry.commit
   }
 }
