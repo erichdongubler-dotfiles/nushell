@@ -1,4 +1,4 @@
-export def init-os-env [] {
+export def init-os-env []: nothing -> record {
 	use std
 
 	let paths = match $nu.os-info.name {
