@@ -32,7 +32,7 @@ export def init-os-env []: nothing -> record {
 		_ => []
 	}
 
-	let env_vars = with-env { PATH: $env.PATH } {
+	let paths = with-env { PATH: $env.PATH } {
 		if ($paths | is-not-empty) {
 			std path add --ret ...$paths
 		} else {
@@ -42,6 +42,6 @@ export def init-os-env []: nothing -> record {
 
 	{
 		SHELL: $nu.current-exe
-		PATH: $env_vars
+		PATH: $paths
 	}
 }
