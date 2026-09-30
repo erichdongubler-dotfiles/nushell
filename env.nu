@@ -3,7 +3,9 @@ $env.EDITOR = "nvim"
 export const ENV_DIR = path self './env/mod.nu'
 
 use $ENV_DIR os init-os-env
-init-os-env | load-env
+let os_env = init-os-env
+$os_env.set | load-env
+hide-env --ignore-errors ...$os_env.remove
 hide init-os-env
 
 let init_jobs = [
