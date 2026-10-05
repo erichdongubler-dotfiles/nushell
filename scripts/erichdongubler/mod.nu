@@ -1,6 +1,7 @@
 export module find-up.nu
 export module gh.nu
 export module jj.nu
+export module mkcd.nu
 export module os.nu
 export module random
 export module lr.nu
