@@ -356,13 +356,106 @@ export def "peel" [
   restring --revisions $revision --before $before
 }
 
-# Creates a new revert of either `@` (if not empty) or `@-`.
-export def "reversi" [] {
-  if not (wc-is-empty) {
-    jj new
+const REVERSI_SQUASH_EXPECTED_VALUES = ["neither" "start" "end" "both"]
+
+# Creates a new revert of either `@` (if not empty) or `@-`, optionally rebasing siblings of the
+# reverted change on top of the reversion.
+export def "reversi" [
+  --rebase-revisions: oneof<nothing, string> = null,
+  # Choose revisions to automatically rebase onto the reversed change.
+  # TODO: Completion?
+  --squash: string@$REVERSI_SQUASH_EXPECTED_VALUES = "both",
+  # How to handle squashing of the start change and its reversed end.
+] {
+  use std/log
+
+  mut squash_start = false
+  mut squash_end = false
+  match $squash {
+    "neither" => {}
+    "start" => {
+      $squash_start = true
+    }
+    "end" => {
+      $squash_end = true
+    }
+    "both" => {
+      $squash_start = true
+      $squash_end = true
+    }
+    $other => {
+      error make {
+        msg: ([
+          $"expected one of ($REVERSI_SQUASH_EXPECTED_VALUES | to nuon) for `--squash`, "
+          $"got ($squash | to nuon)"
+        ] | str join)
+        labels: [{
+          span: (metadata $squash).span
+          text: ''
+        }]
+      }
+    }
   }
-  jj revert --revisions '@-' --before '@'
-  jj describe '@-' --message ''
+
+  let resolve_revset_change_ids = {|revset|
+    (
+      jj log
+        --quiet
+        --ignore-working-copy
+        --no-integrate-operation
+        --revision $revset
+        --template 'json(change_id) ++ "\n"'
+        --no-graph
+    ) | from json --objects
+  }
+
+  let nonempty_wc_or_parents_revset = 'exactly(heads((@ | @-) ~ (@ & empty() & description(""))), 1)'
+  let change_to_revert = do $resolve_revset_change_ids $nonempty_wc_or_parents_revset
+    | first --strict
+  # let nonempty_wc_or_parents_revset = 'heads((@ | @-) ~ (@ & empty() & description("")))'
+  # let nonempty_wc_or_parents = do $resolve_revset_change_ids $nonempty_wc_or_parents_revset
+  # let change_to_revert = if ($nonempty_wc_or_parents | length) == 1 {
+  #   $nonempty_wc_or_parents | first --strict
+  # } else {
+  #   error make {
+  #     msg: ([
+  #       $"revset `($nonempty_wc_or_parents_revset)` "
+  #       "resolves to more than one change, which doesn't make sense"
+  #     ] | str join)
+  #   }
+  # }
+
+  # NOTE: Resolve a user-specified `--rebase-revisions` before we do something that might change
+  # the meaning of short change IDs.
+  let rebase_revisions = $rebase_revisions | default {
+    let make_siblings_revset = { $"($in)-+ ~ ($in)" }
+    $nonempty_wc_or_parents_revset | do $make_siblings_revset
+  }
+  let resolved_rebase_revisions = do $resolve_revset_change_ids $rebase_revisions
+  log info $"rebasing ($resolved_rebase_revisions | to nuon --no-commas)"
+
+  jj new --quiet $change_to_revert
+
+  jj revert --quiet --revisions $change_to_revert --before '@'
+  jj describe --quiet '@-' --message ''
+
+  (
+    jj rebase
+      --quiet
+      --source ($resolved_rebase_revisions | str join ' | ')
+      --onto '@-'
+  )
+
+  if $squash_start {
+    jj squash --quiet --revision '@--'
+  }
+
+  if $squash_end {
+    jj abandon --quiet --restore-descendants '@-'
+    jj abandon --quiet '@' # …because `--restore-descendants` changed it.
+  }
+
+  # TODO: diagnostic output?
 }
 
 # Rebases the specified revisions to be parents `@` and children of the first immutable commits in
