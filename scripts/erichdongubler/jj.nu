@@ -2,7 +2,7 @@ use std/log
 
 use (path self './gh.nu') [GH_IDENT_RE, GH_OWNER_AND_REPO_RE]
 
-const EFFECTIVE_WC_REVSET = "heads(@- | present(@ ~ empty()))"
+const EFFECTIVE_WC_REVSET = "heads(@- | present(@ ~ empty() ~ description('')))"
 
 export def "advance" [
   bookmark: string@"nu-complete jj bookmark list"
@@ -360,6 +360,7 @@ export def "peel" [
 
 export def "promote" [
   --revisions(-r): string = (["immutable()..(" $EFFECTIVE_WC_REVSET ")"] | str join),
+  --after-common-linear-root=true,
 ] {
   let straggler_revset = ([
     "roots(reachable(" $revisions ", mutable()) ~ (immutable()..(" $revisions ")))"
