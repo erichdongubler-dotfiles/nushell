@@ -395,6 +395,19 @@ def "wc-is-empty" []: nothing -> bool {
   jj log --no-graph --revisions '@' --template "self.empty()" | into bool
 }
 
+# Delete the current workspace and its files, `cd`'ing to this workspace's parent (if it exists).
+export def "workspace abandon" --env [] {
+  let root = jj workspace root
+  let name = jj workspace list --template 'json({"name" => name, "root" => root}) ++ "\n"'
+    | from json --objects
+    | where root == $root
+    | first --strict
+    | get name
+  jj workspace forget $name
+  cd ([$root '..'] | path join)
+  rm -r $root
+}
+
 # Push new (randomized) bookmark(s) for heads of the provided revisions.
 export def "yeet" [
   --revisions (-r): string = $EFFECTIVE_WC_REVSET,
