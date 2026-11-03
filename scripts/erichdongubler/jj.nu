@@ -52,7 +52,7 @@ export def --wrapped "git clone-contrib" [
   destination: oneof<path, nothing> = null,
   ...clone_args,
 ] {
-  use std/log
+  use std/log [] # set up `log` cmd. state
 
   let upstream = $upstream
     | each {|upstream|
