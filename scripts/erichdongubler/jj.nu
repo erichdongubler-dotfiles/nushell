@@ -308,6 +308,13 @@ export def "nu-complete jj bookmark list" [] {
   jj bookmark list --quiet --template 'name ++ "\n"' | lines | uniq
 }
 
+export def "nu-complete jj workspace create add-options" [buffer: string] {
+  let base_cmd = 'jj workspace add '
+  $'($base_cmd)($buffer)'
+    | commandline complete --detailed
+    | select value description?
+}
+
 # `jj split` a revision, then `jj restring` it--that is, put it "after" the current change's
 # immutable roots.
 #
@@ -407,6 +414,126 @@ export def "workspace abandon" --env [] {
   jj workspace forget $cwd_workspace.name
   cd ([$cwd_workspace.root '..'] | path join)
   rm -r $cwd_workspace.root
+}
+
+# Conveniently create a workspace using `jj workspace add`.
+#
+# See flags for more description of conveniences.
+#
+# NOTE: Options are based on `jj` 0.46.0.
+export def "workspace create" --env --wrapped [
+  --no-change-cwd,
+  # Don't change CWD to the new workspace.
+  --name: oneof<string, nothing> = null,
+  # The name of the workspace to create.
+  #
+  # If unspecified, it uses the first fallback that succeeds, tried in the following order:
+  #
+  # 1. If the `ZELLIJ_SESSION_NAME` environment variable is available, use it,  stripping
+  #    `<default-workspace-root-dir-name>-` from the start, if present.
+  --parent-dir: oneof<directory, nothing> = null,
+  # The directory in which the new workspace should be placed.
+  #
+  # If unspecified, the parent of root directory of the current repo (i.e., `jj workspace root`) is
+  # used.
+  --sparse-patterns-set: list<path> = [],
+  # The set of sparse patterns to add when `--sparse-patterns` is set to `copy` or `empty`.
+  #
+  # A convenience for calling `jj sparse set --add …` for each path under the hood.
+  ...args: string@"nu-complete jj workspace create add-options",
+  # Additional forwarded to the initial `jj workspace add…` command.
+] {
+  use std/assert
+  use std/log [] # set up `log` cmd. state
+
+  let specified_parent_dir = $parent_dir
+
+  let default_workspace_dir_name = (workspace roots).items
+    | where name == 'default'
+    | first --strict
+    | get root
+    | path basename
+
+  let strip_prepended_default_parent_dir_name = {||
+    (
+      str replace --regex
+        ([
+          '^'
+          ($default_workspace_dir_name | str escape-regex)
+          '(.+)'
+        ] | str join)
+        '$1'
+    )
+  }
+  let prepend_default_parent_dir_name = {||
+    $'($default_workspace_dir_name)-($in)'
+  }
+
+  let name = $name
+    | default {
+      let env_var_name = 'ZELLIJ_SESSION_NAME'
+      let zellij_session_name = $env
+        | get --optional $env_var_name
+        | do $strip_prepended_default_parent_dir_name
+      if $zellij_session_name == null {
+        log debug $"tried to infer `--name` from `$env.($env_var_name)`, but it was undefined"
+      } else {
+        log info $"inferred `--name` from `$env.($env_var_name)`: ($zellij_session_name)"
+      }
+      $zellij_session_name
+    }
+    | default {
+      error make --unspanned {
+        msg: "`--name` was not provided, and no fallbacks yielded a value"
+      }
+    }
+
+  let parent_dir = $specified_parent_dir | default { jj workspace root | path dirname }
+
+  if $parent_dir == "" {
+    mut msg: oneof<string, nothing> = null
+    mut hints: oneof<list<string>, nothing> = null
+    mut span = null
+
+    if $specified_parent_dir == null {
+      $msg = "inferred `--parent-dir` value came up empty"
+      $hints = [
+        ([
+          "`--parent-dir` was unspecified, so this path was inferred: "
+          $parent_dir
+        ] | str join)
+        "you can probably resolve this by explicitly specifying `--parent-dir`"
+      ]
+    } else {
+      $msg = "`--parent-dir` cannot be an empty string"
+      $span = ($specified_parent_dir | metadata).span
+    }
+
+    error make {
+      msg: $msg
+      label: {
+        span: $span
+      }
+      help: ($hints | str join "\n\n")
+    }
+  }
+  assert ($parent_dir != "") "internal error: no `$dir` specified"
+
+  let dir = [$parent_dir ($name | do $prepend_default_parent_dir_name)] | path join
+
+  ^jj workspace add --name $name $dir ...$args
+  # NOTE: `jj workspace add` should have informed the user of the end of this step already.
+
+  cd $dir
+
+  if ($sparse_patterns_set | is-not-empty) {
+    let patterns_args = $sparse_patterns_set | each --flatten { ['--add' $in] }
+    jj sparse set ...$patterns_args
+  }
+
+  if $no_change_cwd {
+    cd -
+  }
 }
 
 def "workspace roots" [
