@@ -397,15 +397,36 @@ def "wc-is-empty" []: nothing -> bool {
 
 # Delete the current workspace and its files, `cd`'ing to this workspace's parent (if it exists).
 export def "workspace abandon" --env [] {
+  let cwd_workspace = (workspace roots).cwd_workspace
+  if $cwd_workspace.name == 'default' {
+    error make --unspanned {
+      msg: "abandoning `default` is not supported"
+    }
+  }
+
+  jj workspace forget $cwd_workspace.name
+  cd ([$cwd_workspace.root '..'] | path join)
+  rm -r $cwd_workspace.root
+}
+
+def "workspace roots" [
+]: nothing -> record<cwd_workspace: record<name: string, root: directory>, items: table<name: string, root: directory>> {
   let root = jj workspace root
-  let name = jj workspace list --template 'json({"name" => name, "root" => root}) ++ "\n"'
+  let workspace_list = jj workspace list --template 'json({"name" => name, "root" => root}) ++ "\n"'
     | from json --objects
-    | where root == $root
-    | first --strict
-    | get name
-  jj workspace forget $name
-  cd ([$root '..'] | path join)
-  rm -r $root
+  {
+    cwd_workspace: {
+      name: (
+        $workspace_list
+          | where root == $root
+          | first
+          | get --optional name
+          | default 'default'
+      )
+      root: $root
+    }
+    items: $workspace_list
+  }
 }
 
 # Push new (randomized) bookmark(s) for heads of the provided revisions.
