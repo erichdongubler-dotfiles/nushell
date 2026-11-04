@@ -1,4 +1,4 @@
-export const ZOXIDE_INIT_PATH = ($nu.cache-dir | path join zoxide init.nu)
+export const ZOXIDE_INIT_PATH = ($nu.user-autoload-dirs.0 | path join zoxide-init.nu)
 
 # The `__zoxide_z`/`__zoxide_zi` definition lines in `zoxide init nushell`
 # output. `export ` is optional: zoxide only added it in 0.10.0.
@@ -18,10 +18,9 @@ const ZOXIDE_DEF_PATTERN = '(?m)^((?:export )?def --env --wrapped __zoxide_zi?\b
 # Nushell 0.116.0 (2026-09-26), so it is unrelated to this; its effect is to
 # complete subdirectories of the cwd, which cannot reach the database at all.
 export def init-zoxide [] {
-	mkdir ($ZOXIDE_INIT_PATH | path dirname)
-
+	# NOTE: Autoload tolerates a missing file, so no stub is needed here.
 	if (which zoxide | is-empty) {
-		echo '# Zoxide not detected, so this stub was created.' | save --force $ZOXIDE_INIT_PATH
+		rm --force $ZOXIDE_INIT_PATH
 		return
 	}
 

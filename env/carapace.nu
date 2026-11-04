@@ -1,11 +1,9 @@
-export const CARAPACE_INIT_PATH = ($nu.cache-dir | path join carapace init.nu)
+export const CARAPACE_INIT_PATH = ($nu.user-autoload-dirs.0 | path join carapace-init.nu)
 
 export def init-carapace [] {
-	mkdir ($CARAPACE_INIT_PATH | path dirname)
-	touch $CARAPACE_INIT_PATH
-
+	# NOTE: Autoload tolerates a missing file, so no stub is needed here.
 	if (which carapace | is-empty) {
-		echo '# Carapace not detected, so this stub was created.' | save --force $CARAPACE_INIT_PATH
+		rm --force $CARAPACE_INIT_PATH
 		return
 	}
 

@@ -299,18 +299,6 @@ use $SCRIPTS_DIR erichdongubler lr
 use $SCRIPTS_DIR erichdongubler mkcd
 use std/clip
 
-use $ENV_DIR atuin ATUIN_INIT_PATH
-source $ATUIN_INIT_PATH
-hide ATUIN_INIT_PATH
-
-use $ENV_DIR carapace CARAPACE_INIT_PATH
-source $CARAPACE_INIT_PATH
-hide CARAPACE_INIT_PATH
-
-use $ENV_DIR zoxide ZOXIDE_INIT_PATH
-source $ZOXIDE_INIT_PATH
-hide ZOXIDE_INIT_PATH
-
 use $ENV_DIR starship STARSHIP_INIT_PATH
 use $STARSHIP_INIT_PATH
 hide STARSHIP_INIT_PATH
