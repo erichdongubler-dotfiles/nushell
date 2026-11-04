@@ -460,7 +460,7 @@ export def "workspace create" --env --wrapped [
         ([
           '^'
           ($default_workspace_dir_name | str escape-regex)
-          '(.+)'
+          '-(.+)'
         ] | str join)
         '$1'
     )
