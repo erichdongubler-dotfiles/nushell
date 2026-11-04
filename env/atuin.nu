@@ -43,6 +43,12 @@ $env.config = (
 # Creates an `init.nu` file via `atuin init …` at `ATUIN_INIT_PATH`.
 export def init-atuin [] {
 	mkdir ($ATUIN_INIT_PATH | path dirname)
+
+	if (which atuin | is-empty) {
+		echo '# Atuin not detected, so this stub was created.' | save --force $ATUIN_INIT_PATH
+		return
+	}
+
 	atuin init nu --disable-up-arrow | save --force $ATUIN_INIT_PATH
 	echo $ctrl_b_handler | save --append $ATUIN_INIT_PATH
 }

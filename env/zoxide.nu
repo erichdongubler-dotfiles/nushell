@@ -20,6 +20,11 @@ const ZOXIDE_DEF_PATTERN = '(?m)^((?:export )?def --env --wrapped __zoxide_zi?\b
 export def init-zoxide [] {
 	mkdir ($ZOXIDE_INIT_PATH | path dirname)
 
+	if (which zoxide | is-empty) {
+		echo '# Zoxide not detected, so this stub was created.' | save --force $ZOXIDE_INIT_PATH
+		return
+	}
+
 	let init = (
 		zoxide init nushell --hook prompt
 			| str replace --all --regex $ZOXIDE_DEF_PATTERN "@complete external\n$1"
