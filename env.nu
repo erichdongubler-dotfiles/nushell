@@ -16,6 +16,10 @@ let init_jobs = [
 		init-mise
 	}
 	{
+		use $ENV_DIR mise gen-completions-mise
+		gen-completions-mise
+	}
+	{
 		use $ENV_DIR zoxide init-zoxide
 		init-zoxide
 	}
