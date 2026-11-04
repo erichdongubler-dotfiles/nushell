@@ -12,6 +12,10 @@ let init_jobs = [
 		init-atuin
 	}
 	{
+		use $ENV_DIR mise init-mise
+		init-mise
+	}
+	{
 		use $ENV_DIR zoxide init-zoxide
 		init-zoxide
 	}
