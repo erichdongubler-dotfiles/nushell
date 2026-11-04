@@ -1,10 +1,8 @@
-export const ZOXIDE_INIT_PATH = ($nu.user-autoload-dirs.0 | path join zoxide-init.nu)
-
 # The `__zoxide_z`/`__zoxide_zi` definition lines in `zoxide init nushell`
 # output. `export ` is optional: zoxide only added it in 0.10.0.
 const ZOXIDE_DEF_PATTERN = '(?m)^((?:export )?def --env --wrapped __zoxide_zi?\b)'
 
-# Creates an `init.nu` file via `zoxide init …` at `ZOXIDE_INIT_PATH`, with
+# Creates a `zoxide-init.nu` autoload file via `zoxide init …`, with
 # `@complete external` injected onto the jump commands.
 #
 # Nushell 0.116 stopped routing `def --wrapped` arguments to
@@ -18,9 +16,11 @@ const ZOXIDE_DEF_PATTERN = '(?m)^((?:export )?def --env --wrapped __zoxide_zi?\b
 # Nushell 0.116.0 (2026-09-26), so it is unrelated to this; its effect is to
 # complete subdirectories of the cwd, which cannot reach the database at all.
 export def init-zoxide [] {
+	let init_path = $nu.user-autoload-dirs.0 | path join zoxide-init.nu
+
 	# NOTE: Autoload tolerates a missing file, so no stub is needed here.
 	if (which zoxide | is-empty) {
-		rm --force $ZOXIDE_INIT_PATH
+		rm --force $init_path
 		return
 	}
 
@@ -38,5 +38,5 @@ export def init-zoxide [] {
 		}
 	}
 
-	$init | save --force $ZOXIDE_INIT_PATH
+	$init | save --force $init_path
 }
