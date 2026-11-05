@@ -13,11 +13,7 @@ export def init-starship [] {
 }
 
 export def gen-completions-starship [] {
-	let completions_path = [
-		$nu.default-config-dir
-		'autoload'
-		'starship-completions.nu'
-	] | path join
+	let completions_path = $nu.user-autoload-dirs.0 | path join starship-completions.nu
 
 	# NOTE: Autoload tolerates a missing file, so no stub is needed here.
 	if (which starship | is-empty) {
