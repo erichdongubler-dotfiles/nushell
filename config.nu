@@ -29,84 +29,45 @@ $env.config.rm.always_trash = false
 $env.config.shell_integration.osc133 = false # needed to avoid newlines on each keystroke: <https://github.com/nushell/nushell/issues/5585>
 $env.config.show_banner = false
 
-$env.config.menus = [
-  {
-    name: completion_menu
-    only_buffer_difference: false
-    marker: "(completion) "
-    type: {
-      layout: columnar
-      columns: 4
-      col_width: 20
-      col_padding: 2
+# NOTE: Assigning a list to `menus` or `keybindings` replaces Nushell's defaults wholesale, so
+# only layer differences over them.
+#
+# A menu replaces any earlier one of the same `name` as a whole, so patch defaults in place. Overrides
+# are applied with `record apply --strict`, so that ones made stale by upstream renaming or removing
+# a menu or field get reported, rather than silently doing nothing.
+do --env {
+  use std/log
+
+  let menu_overrides = {
+    completion_menu: { marker: { "(completion) " } }
+    history_menu: { marker: { "(history) " } }
+    help_menu: { marker: { "(help) " } type: { description_rows: { 10 } } }
+    ide_completion_menu: { marker: { "" } type: { min_description_width: { 0 } } }
+  }
+
+  let unknown_menu_names = $menu_overrides
+    | columns
+    | where $it not-in ($env.config.menus | get name)
+  if ($unknown_menu_names | is-not-empty) {
+    log warning $"ignoring overrides for unknown menus: ($unknown_menu_names | to nuon)"
+  }
+
+  $env.config.menus = $env.config.menus | each {|menu|
+    let overrides = $menu_overrides | get --optional $menu.name
+    if $overrides == null {
+      return $menu
     }
-    style: {
-      text: green
-      selected_text: green_reverse
-      description_text: yellow
+    try {
+      $menu | record apply --strict $overrides
+    } catch {|e|
+      log warning $"ignoring overrides for `($menu.name)` menu: ($e.msg)"
+      $menu
     }
   }
-  {
-    name: history_menu
-    only_buffer_difference: true
-    marker: "(history) "
-    type: {
-      layout: list
-      page_size: 10
-    }
-    style: {
-      text: green
-      selected_text: green_reverse
-      description_text: yellow
-    }
-  }
-  {
-    name: help_menu
-    only_buffer_difference: true
-    marker: "(help) "
-    type: {
-      layout: description
-      columns: 4
-      col_width: 20
-      col_padding: 2
-      selection_rows: 4
-      description_rows: 10
-    }
-    style: {
-      text: green
-      selected_text: green_reverse
-      description_text: yellow
-    }
-  }
-  {
-    name: ide_completion_menu
-    only_buffer_difference: false
-    marker: ""
-    type: {
-      layout: ide
-      min_completion_width: 0,
-      max_completion_width: 50,
-      max_completion_height: 10,
-      padding: 0,
-      border: true,
-      cursor_offset: 0,
-      description_mode: "prefer_right"
-      min_description_width: 0
-      max_description_width: 50
-      max_description_height: 10
-      description_offset: 1
-      correct_cursor_pos: false
-    }
-    style: {
-      text: green
-      selected_text: { attr: r }
-      description_text: yellow
-      match_text: { attr: u }
-      selected_match_text: { attr: ur }
-    }
-  }
-]
-$env.config.keybindings = [
+}
+# A keybinding replaces any earlier one of the same `modifier` and `keycode`, per `mode`. Use
+# `event: null` to unbind a key.
+$env.config.keybindings ++= [
   {
     name: unix_enter
     modifier: control
@@ -123,26 +84,6 @@ $env.config.keybindings = [
       until: [
         { send: menu name: completion_menu }
         { send: menunext }
-      ]
-    }
-  }
-  {
-    name: completion_previous
-    modifier: shift
-    keycode: backtab
-    mode: [emacs, vi_normal, vi_insert]
-    event: { send: menuprevious }
-  }
-  {
-    name: ide_completion_menu_ctrl_space
-    modifier: control
-    keycode: space
-    mode: [emacs vi_normal vi_insert]
-    event: {
-      until: [
-        { send: menu name: ide_completion_menu }
-        { send: menunext }
-        { edit: complete }
       ]
     }
   }
@@ -196,25 +137,6 @@ $env.config.keybindings = [
           | lines
           | str join '; '
       )"
-    }
-  }
-  {
-    name: next_page
-    modifier: control
-    keycode: char_x
-    mode: emacs
-    event: { send: menupagenext }
-  }
-  {
-    name: undo_or_previous_page
-    modifier: control
-    keycode: char_z
-    mode: emacs
-    event: {
-      until: [
-        { send: menupageprevious }
-        { edit: undo }
-      ]
     }
   }
   {
