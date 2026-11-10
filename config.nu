@@ -260,3 +260,41 @@ $env.PROMPT_COMMAND = {
 }
 $env.PROMPT_INDICATOR_VI_INSERT = { "" }
 $env.PROMPT_INDICATOR_VI_NORMAL = { "" }
+
+try {
+  let is_first_pane_in_zellij_session = (
+    (which zellij | is-not-empty)
+      and 'ZELLIJ' in $env
+      and $env.ZELLIJ_PANE_ID == '0'
+      # # TODO: We still need to figure out if this session just started or not. We can get pane
+      # # 0 on a resurrected session. Maybe it's not a problem? 🤔
+      # and (try {
+      #   (zellij action current-tab-info --json | from json | get tab_id) == 0
+      # } catch {
+      #   # NOTE: This is the only case I've observed. Maybe we don't need the above condition?
+      #   true
+      # })
+  )
+  if $is_first_pane_in_zellij_session {
+    let cases = [
+    ]
+
+    let session_name = $env.ZELLIJ_SESSION_NAME
+    for case in $cases {
+      if ($session_name =~ $case.re) {
+        try {
+          use std/assert
+          let parsed = $session_name | parse --regex $case.re
+          assert (($parsed | length) == 1)
+          do --env $case.handler $session_name ($parsed | first --strict)
+        } catch {|e|
+          log error $"issue encountered while setting up `zellij` session with `($case.name)` handler"
+          $e.raw
+        }
+      }
+    }
+  }
+} catch {|e|
+  log error $"issue encountered while determining `zellij` session startup actions"
+  $e.raw
+}
