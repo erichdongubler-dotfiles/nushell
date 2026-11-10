@@ -280,7 +280,7 @@ try {
     let cases = [
       {
         name: 'firefox'
-        re: '^(firefox-)?bug-(?P<bug_id>\d+)$'
+        re: '^(firefox-)?(?:(?P<op>debug)-)?bug-(?P<bug_id>\d+)$'
         handler: {|session_name, captures|
           let bug_id = $captures.bug_id | into int
 
@@ -300,6 +300,16 @@ try {
           cd ~/workspace/mozilla/firefox/firefox/
           match $captures.op {
             null => {}
+            'debug' => {
+              log info "creating and switching to `debug`-preset workspace…"
+              use ~/workspace/mozilla/firefox/scripts/fx.nu
+              try {
+                fx workspace create --or-use-existing
+              }
+              zellij action paste "claude \"\""
+              zellij action send-keys "Left"
+              zellij action paste $"I want to diagnose Firefox bug ($bug_id). Please work with me to debug it. "
+            }
             $other => {
               log warning $"unrecognized session name op. ($other | to nuon), ignoring"
             }
