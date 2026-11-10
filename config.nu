@@ -261,6 +261,7 @@ $env.PROMPT_COMMAND = {
 $env.PROMPT_INDICATOR_VI_INSERT = { "" }
 $env.PROMPT_INDICATOR_VI_NORMAL = { "" }
 
+use std/log
 try {
   let is_first_pane_in_zellij_session = (
     (which zellij | is-not-empty)
@@ -277,6 +278,34 @@ try {
   )
   if $is_first_pane_in_zellij_session {
     let cases = [
+      {
+        name: 'firefox'
+        re: '^(firefox-)?bug-(?P<bug_id>\d+)$'
+        handler: {|session_name, captures|
+          let bug_id = $captures.bug_id | into int
+
+          # NOTE: We _have_ to use the old session name first, or subsequent `zellij action`
+          # commands will hang indefinitely.
+          let new_session_name = $'bug-($bug_id)'
+          if $new_session_name != $session_name {
+            log debug $"renaming Zellij session from `($session_name)` to `($new_session_name)`…"
+            zellij action rename-session $new_session_name
+            $env.ZELLIJ_SESSION_NAME = $new_session_name
+          }
+
+          # TODO: Use old tab info, if available?
+          log debug $"renaming Zellij tab to `firefox`…"
+          zellij action rename-tab 'firefox'
+
+          cd ~/workspace/mozilla/firefox/firefox/
+          match $captures.op {
+            null => {}
+            $other => {
+              log warning $"unrecognized session name op. ($other | to nuon), ignoring"
+            }
+          }
+        }
+      }
     ]
 
     let session_name = $env.ZELLIJ_SESSION_NAME
