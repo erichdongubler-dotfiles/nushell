@@ -135,8 +135,8 @@ export def "bookmark resolve" [
   let template = '
     if(
       conflict &&
-      self.added_targets().filter(|t| !t.hidden()).len() == 1,
-      self.added_targets().filter(|t| !t.hidden()).map(|t| separate(" ", self.name(), t.commit_id().short()) ++ "\n")
+      self.added_targets().filter(|t| t).filter(|t| !t.hidden()).len() == 1,
+      self.added_targets().filter(|t| t).filter(|t| !t.hidden()).map(|t| separate(" ", self.name(), t.commit_id().short()) ++ "\n")
     )
   '
   let conflicted_bookmarks_with_single_visible_added_target = (
