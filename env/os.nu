@@ -87,6 +87,7 @@ def systemctl-session-env-diff []: nothing -> record<set: record, remove: list<s
 			}
 		}
 		| reduce --fold {} {|it, acc| $acc | insert $it.key $it.value }
+		| reject --optional EDITOR
 
 	const MUST_BE_REMOVED_IF_NOT_REPLACED = [
 		DISPLAY
